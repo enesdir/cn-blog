@@ -1,0 +1,14 @@
+{
+  "header": {
+    "description": "deneme"
+  },
+  "title": {
+    "home": "Blog Uygulaması",
+    "portal": "Blog Yönetici Paneli",
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol"
+  },
+  "errors": {
+    "inactivity_logged_out": "size daha fazla tahammül edemedik kovduk."
+  }
+}

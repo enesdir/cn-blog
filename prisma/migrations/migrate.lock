@@ -1,0 +1,6 @@
+# Prisma Migrate lockfile v1
+
+20200818183643-initial
+20200824202825-addedpost
+20200824205506-addedcomment
+20200825211104-viewcount
