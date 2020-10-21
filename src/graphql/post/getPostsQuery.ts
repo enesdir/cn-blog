@@ -8,7 +8,7 @@ export const getPostsQuery = gql`
       content
       author {
         id
-        name
+        fullName
       }
     }
   }

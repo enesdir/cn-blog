@@ -1087,17 +1087,17 @@ export type UserSignupMutation = (
   )> }
 );
 
-export type FindManyPostQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindManyPostQuery = (
+export type PostsQuery = (
   { __typename?: 'Query' }
   & { posts: Array<(
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'title' | 'content'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'name'>
+      & Pick<User, 'id' | 'fullName'>
     )> }
   )> }
 );
