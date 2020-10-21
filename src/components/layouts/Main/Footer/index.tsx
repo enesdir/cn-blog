@@ -8,14 +8,8 @@ import Typography from '@material-ui/core/Typography'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     footer: {
-      width: '100%',
+      padding: theme.spacing(6, 0),
       backgroundColor: theme.palette.background.paper,
-      boxShadow: 'none',
-      textAlign: 'center',
-      minHeight: '58px',
-      alignItems: 'center',
-      display: 'flex',
-      margin: 'auto auto 0',
     },
   })
 )

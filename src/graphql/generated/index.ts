@@ -7,30 +7,30 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
-  /**
-   * A date string, such as 2007-12-03, compliant with the `full-date` format
-   * outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for
-   * representation of dates and times using the Gregorian calendar.
-   */
+  /** A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   Date: any;
+  DateTime: any;
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   error?: Maybe<Scalars['String']>;
-  token: Scalars['String'];
-  user: User;
+  token?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
 };
 
 export type BatchPayload = {
   __typename?: 'BatchPayload';
-  count: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
 };
 
-export type BooleanFilter = {
+export type BoolFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['Boolean']>;
+};
+
+export type BoolFilter = {
   equals?: Maybe<Scalars['Boolean']>;
-  not?: Maybe<Scalars['Boolean']>;
+  not?: Maybe<NestedBoolFilter>;
 };
 
 export type Comment = {
@@ -77,7 +77,7 @@ export type CommentCreateWithoutPostInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type CommentFilter = {
+export type CommentListRelationFilter = {
   every?: Maybe<CommentWhereInput>;
   none?: Maybe<CommentWhereInput>;
   some?: Maybe<CommentWhereInput>;
@@ -94,7 +94,7 @@ export type CommentOrderByInput = {
 
 export type CommentScalarWhereInput = {
   AND?: Maybe<Array<CommentScalarWhereInput>>;
-  authorId?: Maybe<NullableIntFilter>;
+  authorId?: Maybe<IntNullableFilter>;
   contain?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
@@ -106,22 +106,22 @@ export type CommentScalarWhereInput = {
 
 export type CommentUpdateInput = {
   author?: Maybe<UserUpdateOneWithoutCommentsInput>;
-  contain?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
+  contain?: Maybe<StringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   post?: Maybe<PostUpdateOneRequiredWithoutCommentsInput>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpdateManyDataInput = {
-  contain?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  contain?: Maybe<StringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpdateManyMutationInput = {
-  contain?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  contain?: Maybe<StringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpdateManyWithoutAuthorInput = {
@@ -154,17 +154,17 @@ export type CommentUpdateManyWithWhereNestedInput = {
 };
 
 export type CommentUpdateWithoutAuthorDataInput = {
-  contain?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
+  contain?: Maybe<StringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   post?: Maybe<PostUpdateOneRequiredWithoutCommentsInput>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpdateWithoutPostDataInput = {
   author?: Maybe<UserUpdateOneWithoutCommentsInput>;
-  contain?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  contain?: Maybe<StringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpdateWithWhereUniqueWithoutAuthorInput = {
@@ -192,7 +192,7 @@ export type CommentUpsertWithWhereUniqueWithoutPostInput = {
 export type CommentWhereInput = {
   AND?: Maybe<Array<CommentWhereInput>>;
   author?: Maybe<UserWhereInput>;
-  authorId?: Maybe<NullableIntFilter>;
+  authorId?: Maybe<IntNullableFilter>;
   contain?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
@@ -209,6 +209,10 @@ export type CommentWhereUniqueInput = {
 
 
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['DateTime']>;
+};
+
 export type DateTimeFilter = {
   equals?: Maybe<Scalars['DateTime']>;
   gt?: Maybe<Scalars['DateTime']>;
@@ -216,8 +220,23 @@ export type DateTimeFilter = {
   in?: Maybe<Array<Scalars['DateTime']>>;
   lt?: Maybe<Scalars['DateTime']>;
   lte?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeFilter>;
   notIn?: Maybe<Array<Scalars['DateTime']>>;
+};
+
+export type EnumRoleFieldUpdateOperationsInput = {
+  set?: Maybe<Role>;
+};
+
+export type EnumRoleFilter = {
+  equals?: Maybe<Role>;
+  in?: Maybe<Array<Role>>;
+  not?: Maybe<NestedEnumRoleFilter>;
+  notIn?: Maybe<Array<Role>>;
+};
+
+export type IntFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['Int']>;
 };
 
 export type IntFilter = {
@@ -227,29 +246,46 @@ export type IntFilter = {
   in?: Maybe<Array<Scalars['Int']>>;
   lt?: Maybe<Scalars['Int']>;
   lte?: Maybe<Scalars['Int']>;
-  not?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntFilter>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+};
+
+export type IntNullableFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
   notIn?: Maybe<Array<Scalars['Int']>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  changePassword: User;
+  changePassword?: Maybe<User>;
   createOneComment: Comment;
   createOnePost: Post;
-  deleteManyComment: BatchPayload;
-  deleteManyPost: BatchPayload;
+  createOneUser: User;
+  deleteManyComment?: Maybe<BatchPayload>;
+  deleteManyPost?: Maybe<BatchPayload>;
+  deleteManyUser?: Maybe<BatchPayload>;
   deleteOneComment?: Maybe<Comment>;
   deleteOnePost?: Maybe<Post>;
-  updateManyComment: BatchPayload;
-  updateManyPost: BatchPayload;
+  deleteOneUser?: Maybe<User>;
+  updateManyComment?: Maybe<BatchPayload>;
+  updateManyPost?: Maybe<BatchPayload>;
+  updateManyUser?: Maybe<BatchPayload>;
   updateOneComment: Comment;
   updateOnePost: Post;
+  updateOneUser: User;
   upsertOneComment: Comment;
   upsertOnePost: Post;
+  upsertOneUser: User;
   /** Login mutation: Send your email and password then get back a token */
-  userLogin: AuthPayload;
+  userLogin?: Maybe<AuthPayload>;
   /** Call this mutation to sign a new user up. It will return a auth payload */
-  userSignup: AuthPayload;
+  userSignup?: Maybe<AuthPayload>;
 };
 
 
@@ -269,6 +305,11 @@ export type MutationCreateOnePostArgs = {
 };
 
 
+export type MutationCreateOneUserArgs = {
+  data: UserCreateInput;
+};
+
+
 export type MutationDeleteManyCommentArgs = {
   where?: Maybe<CommentWhereInput>;
 };
@@ -279,6 +320,11 @@ export type MutationDeleteManyPostArgs = {
 };
 
 
+export type MutationDeleteManyUserArgs = {
+  where?: Maybe<UserWhereInput>;
+};
+
+
 export type MutationDeleteOneCommentArgs = {
   where: CommentWhereUniqueInput;
 };
@@ -286,6 +332,11 @@ export type MutationDeleteOneCommentArgs = {
 
 export type MutationDeleteOnePostArgs = {
   where: PostWhereUniqueInput;
+};
+
+
+export type MutationDeleteOneUserArgs = {
+  where: UserWhereUniqueInput;
 };
 
 
@@ -301,6 +352,12 @@ export type MutationUpdateManyPostArgs = {
 };
 
 
+export type MutationUpdateManyUserArgs = {
+  data: UserUpdateManyMutationInput;
+  where?: Maybe<UserWhereInput>;
+};
+
+
 export type MutationUpdateOneCommentArgs = {
   data: CommentUpdateInput;
   where: CommentWhereUniqueInput;
@@ -310,6 +367,12 @@ export type MutationUpdateOneCommentArgs = {
 export type MutationUpdateOnePostArgs = {
   data: PostUpdateInput;
   where: PostWhereUniqueInput;
+};
+
+
+export type MutationUpdateOneUserArgs = {
+  data: UserUpdateInput;
+  where: UserWhereUniqueInput;
 };
 
 
@@ -327,6 +390,13 @@ export type MutationUpsertOnePostArgs = {
 };
 
 
+export type MutationUpsertOneUserArgs = {
+  create: UserCreateInput;
+  update: UserUpdateInput;
+  where: UserWhereUniqueInput;
+};
+
+
 export type MutationUserLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -340,18 +410,52 @@ export type MutationUserSignupArgs = {
   surname?: Maybe<Scalars['String']>;
 };
 
-export type NullableIntFilter = {
+export type NestedBoolFilter = {
+  equals?: Maybe<Scalars['Boolean']>;
+  not?: Maybe<NestedBoolFilter>;
+};
+
+export type NestedDateTimeFilter = {
+  equals?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+  gte?: Maybe<Scalars['DateTime']>;
+  in?: Maybe<Array<Scalars['DateTime']>>;
+  lt?: Maybe<Scalars['DateTime']>;
+  lte?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeFilter>;
+  notIn?: Maybe<Array<Scalars['DateTime']>>;
+};
+
+export type NestedEnumRoleFilter = {
+  equals?: Maybe<Role>;
+  in?: Maybe<Array<Role>>;
+  not?: Maybe<NestedEnumRoleFilter>;
+  notIn?: Maybe<Array<Role>>;
+};
+
+export type NestedIntFilter = {
   equals?: Maybe<Scalars['Int']>;
   gt?: Maybe<Scalars['Int']>;
   gte?: Maybe<Scalars['Int']>;
   in?: Maybe<Array<Scalars['Int']>>;
   lt?: Maybe<Scalars['Int']>;
   lte?: Maybe<Scalars['Int']>;
-  not?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntFilter>;
   notIn?: Maybe<Array<Scalars['Int']>>;
 };
 
-export type NullableStringFilter = {
+export type NestedIntNullableFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+};
+
+export type NestedStringFilter = {
   contains?: Maybe<Scalars['String']>;
   endsWith?: Maybe<Scalars['String']>;
   equals?: Maybe<Scalars['String']>;
@@ -360,9 +464,27 @@ export type NullableStringFilter = {
   in?: Maybe<Array<Scalars['String']>>;
   lt?: Maybe<Scalars['String']>;
   lte?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringFilter>;
   notIn?: Maybe<Array<Scalars['String']>>;
   startsWith?: Maybe<Scalars['String']>;
+};
+
+export type NestedStringNullableFilter = {
+  contains?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  equals?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringNullableFilter>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  startsWith?: Maybe<Scalars['String']>;
+};
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['String']>;
 };
 
 export type Post = {
@@ -374,9 +496,9 @@ export type Post = {
   createdAt: Scalars['DateTime'];
   id: Scalars['Int'];
   published: Scalars['Boolean'];
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
-  viewCount: Scalars['Int'];
+  viewCount?: Maybe<Scalars['Int']>;
 };
 
 
@@ -429,7 +551,7 @@ export type PostCreateWithoutCommentsInput = {
   viewCount?: Maybe<Scalars['Int']>;
 };
 
-export type PostFilter = {
+export type PostListRelationFilter = {
   every?: Maybe<PostWhereInput>;
   none?: Maybe<PostWhereInput>;
   some?: Maybe<PostWhereInput>;
@@ -448,14 +570,13 @@ export type PostOrderByInput = {
 
 export type PostScalarWhereInput = {
   AND?: Maybe<Array<PostScalarWhereInput>>;
-  authorId?: Maybe<NullableIntFilter>;
-  comments?: Maybe<CommentFilter>;
-  content?: Maybe<NullableStringFilter>;
+  authorId?: Maybe<IntNullableFilter>;
+  content?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
   NOT?: Maybe<Array<PostScalarWhereInput>>;
   OR?: Maybe<Array<PostScalarWhereInput>>;
-  published?: Maybe<BooleanFilter>;
+  published?: Maybe<BoolFilter>;
   title?: Maybe<StringFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
   viewCount?: Maybe<IntFilter>;
@@ -464,30 +585,30 @@ export type PostScalarWhereInput = {
 export type PostUpdateInput = {
   author?: Maybe<UserUpdateOneWithoutPostsInput>;
   comments?: Maybe<CommentUpdateManyWithoutPostInput>;
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  published?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  viewCount?: Maybe<Scalars['Int']>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  published?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
 export type PostUpdateManyDataInput = {
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  published?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  viewCount?: Maybe<Scalars['Int']>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  published?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
 export type PostUpdateManyMutationInput = {
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  published?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  viewCount?: Maybe<Scalars['Int']>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  published?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
 export type PostUpdateManyWithoutAuthorInput = {
@@ -516,22 +637,22 @@ export type PostUpdateOneRequiredWithoutCommentsInput = {
 
 export type PostUpdateWithoutAuthorDataInput = {
   comments?: Maybe<CommentUpdateManyWithoutPostInput>;
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  published?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  viewCount?: Maybe<Scalars['Int']>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  published?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
 export type PostUpdateWithoutCommentsDataInput = {
   author?: Maybe<UserUpdateOneWithoutPostsInput>;
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  published?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  viewCount?: Maybe<Scalars['Int']>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  published?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
 export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
@@ -553,14 +674,14 @@ export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
 export type PostWhereInput = {
   AND?: Maybe<Array<PostWhereInput>>;
   author?: Maybe<UserWhereInput>;
-  authorId?: Maybe<NullableIntFilter>;
-  comments?: Maybe<CommentFilter>;
-  content?: Maybe<NullableStringFilter>;
+  authorId?: Maybe<IntNullableFilter>;
+  comments?: Maybe<CommentListRelationFilter>;
+  content?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
   NOT?: Maybe<Array<PostWhereInput>>;
   OR?: Maybe<Array<PostWhereInput>>;
-  published?: Maybe<BooleanFilter>;
+  published?: Maybe<BoolFilter>;
   title?: Maybe<StringFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
   viewCount?: Maybe<IntFilter>;
@@ -573,12 +694,15 @@ export type PostWhereUniqueInput = {
 export type Query = {
   __typename?: 'Query';
   comments: Array<Comment>;
-  findManyComment?: Maybe<Array<Comment>>;
-  findManyCommentCount: Scalars['Int'];
-  findManyPost?: Maybe<Array<Post>>;
-  findManyPostCount: Scalars['Int'];
+  findManyComment?: Maybe<Array<Maybe<Comment>>>;
+  findManyCommentCount?: Maybe<Scalars['Int']>;
+  findManyPost?: Maybe<Array<Maybe<Post>>>;
+  findManyPostCount?: Maybe<Scalars['Int']>;
+  findManyUser?: Maybe<Array<Maybe<User>>>;
+  findManyUserCount?: Maybe<Scalars['Int']>;
   findOneComment?: Maybe<Comment>;
   findOnePost?: Maybe<Post>;
+  findOneUser?: Maybe<User>;
   /** The current authenticated User */
   me?: Maybe<User>;
   posts: Array<Post>;
@@ -632,6 +756,24 @@ export type QueryFindManyPostCountArgs = {
 };
 
 
+export type QueryFindManyUserArgs = {
+  cursor?: Maybe<UserWhereUniqueInput>;
+  orderBy?: Maybe<UserOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  where?: Maybe<UserWhereInput>;
+};
+
+
+export type QueryFindManyUserCountArgs = {
+  cursor?: Maybe<UserWhereUniqueInput>;
+  orderBy?: Maybe<UserOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  where?: Maybe<UserWhereInput>;
+};
+
+
 export type QueryFindOneCommentArgs = {
   where: CommentWhereUniqueInput;
 };
@@ -639,6 +781,11 @@ export type QueryFindOneCommentArgs = {
 
 export type QueryFindOnePostArgs = {
   where: PostWhereUniqueInput;
+};
+
+
+export type QueryFindOneUserArgs = {
+  where: UserWhereUniqueInput;
 };
 
 
@@ -657,8 +804,14 @@ export type QueryUsersArgs = {
   before?: Maybe<UserWhereUniqueInput>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<UserOrderByInput>>;
   where?: Maybe<UserWhereInput>;
 };
+
+export enum QueryMode {
+  Default = 'default',
+  Insensitive = 'insensitive'
+}
 
 export enum Role {
   Admin = 'ADMIN',
@@ -678,6 +831,10 @@ export enum SortOrder {
   Desc = 'desc'
 }
 
+export type StringFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['String']>;
+};
+
 export type StringFilter = {
   contains?: Maybe<Scalars['String']>;
   endsWith?: Maybe<Scalars['String']>;
@@ -687,7 +844,23 @@ export type StringFilter = {
   in?: Maybe<Array<Scalars['String']>>;
   lt?: Maybe<Scalars['String']>;
   lte?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
+  mode?: Maybe<QueryMode>;
+  not?: Maybe<NestedStringFilter>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  startsWith?: Maybe<Scalars['String']>;
+};
+
+export type StringNullableFilter = {
+  contains?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  equals?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  mode?: Maybe<QueryMode>;
+  not?: Maybe<NestedStringNullableFilter>;
   notIn?: Maybe<Array<Scalars['String']>>;
   startsWith?: Maybe<Scalars['String']>;
 };
@@ -698,13 +871,45 @@ export type User = {
   comments: Array<Comment>;
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
-  fullName: Scalars['String'];
+  fullName?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   isDeleted: Scalars['Boolean'];
   name: Scalars['String'];
   password: Scalars['String'];
   posts: Array<Post>;
-  role: RoleEnum;
+  role?: Maybe<RoleEnum>;
+  surname: Scalars['String'];
+};
+
+
+/** A user registered with the application */
+export type UserCommentsArgs = {
+  cursor?: Maybe<CommentWhereUniqueInput>;
+  orderBy?: Maybe<CommentOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  where?: Maybe<CommentWhereInput>;
+};
+
+
+/** A user registered with the application */
+export type UserPostsArgs = {
+  cursor?: Maybe<PostWhereUniqueInput>;
+  orderBy?: Maybe<PostOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  where?: Maybe<PostWhereInput>;
+};
+
+export type UserCreateInput = {
+  comments?: Maybe<CommentCreateManyWithoutAuthorInput>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  email: Scalars['String'];
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  password: Scalars['String'];
+  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  role?: Maybe<Role>;
   surname: Scalars['String'];
 };
 
@@ -740,6 +945,39 @@ export type UserCreateWithoutPostsInput = {
   surname: Scalars['String'];
 };
 
+export type UserOrderByInput = {
+  createdAt?: Maybe<SortOrder>;
+  email?: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
+  isDeleted?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  password?: Maybe<SortOrder>;
+  role?: Maybe<SortOrder>;
+  surname?: Maybe<SortOrder>;
+};
+
+export type UserUpdateInput = {
+  comments?: Maybe<CommentUpdateManyWithoutAuthorInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  email?: Maybe<StringFieldUpdateOperationsInput>;
+  isDeleted?: Maybe<BoolFieldUpdateOperationsInput>;
+  name?: Maybe<StringFieldUpdateOperationsInput>;
+  password?: Maybe<StringFieldUpdateOperationsInput>;
+  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  role?: Maybe<EnumRoleFieldUpdateOperationsInput>;
+  surname?: Maybe<StringFieldUpdateOperationsInput>;
+};
+
+export type UserUpdateManyMutationInput = {
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  email?: Maybe<StringFieldUpdateOperationsInput>;
+  isDeleted?: Maybe<BoolFieldUpdateOperationsInput>;
+  name?: Maybe<StringFieldUpdateOperationsInput>;
+  password?: Maybe<StringFieldUpdateOperationsInput>;
+  role?: Maybe<EnumRoleFieldUpdateOperationsInput>;
+  surname?: Maybe<StringFieldUpdateOperationsInput>;
+};
+
 export type UserUpdateOneWithoutCommentsInput = {
   connect?: Maybe<UserWhereUniqueInput>;
   create?: Maybe<UserCreateWithoutCommentsInput>;
@@ -759,25 +997,25 @@ export type UserUpdateOneWithoutPostsInput = {
 };
 
 export type UserUpdateWithoutCommentsDataInput = {
-  createdAt?: Maybe<Scalars['DateTime']>;
-  email?: Maybe<Scalars['String']>;
-  isDeleted?: Maybe<Scalars['Boolean']>;
-  name?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  email?: Maybe<StringFieldUpdateOperationsInput>;
+  isDeleted?: Maybe<BoolFieldUpdateOperationsInput>;
+  name?: Maybe<StringFieldUpdateOperationsInput>;
+  password?: Maybe<StringFieldUpdateOperationsInput>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
-  role?: Maybe<Role>;
-  surname?: Maybe<Scalars['String']>;
+  role?: Maybe<EnumRoleFieldUpdateOperationsInput>;
+  surname?: Maybe<StringFieldUpdateOperationsInput>;
 };
 
 export type UserUpdateWithoutPostsDataInput = {
   comments?: Maybe<CommentUpdateManyWithoutAuthorInput>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  email?: Maybe<Scalars['String']>;
-  isDeleted?: Maybe<Scalars['Boolean']>;
-  name?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  role?: Maybe<Role>;
-  surname?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  email?: Maybe<StringFieldUpdateOperationsInput>;
+  isDeleted?: Maybe<BoolFieldUpdateOperationsInput>;
+  name?: Maybe<StringFieldUpdateOperationsInput>;
+  password?: Maybe<StringFieldUpdateOperationsInput>;
+  role?: Maybe<EnumRoleFieldUpdateOperationsInput>;
+  surname?: Maybe<StringFieldUpdateOperationsInput>;
 };
 
 export type UserUpsertWithoutCommentsInput = {
@@ -792,17 +1030,17 @@ export type UserUpsertWithoutPostsInput = {
 
 export type UserWhereInput = {
   AND?: Maybe<Array<UserWhereInput>>;
-  comments?: Maybe<CommentFilter>;
+  comments?: Maybe<CommentListRelationFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   email?: Maybe<StringFilter>;
   id?: Maybe<IntFilter>;
-  isDeleted?: Maybe<BooleanFilter>;
+  isDeleted?: Maybe<BoolFilter>;
   name?: Maybe<StringFilter>;
   NOT?: Maybe<Array<UserWhereInput>>;
   OR?: Maybe<Array<UserWhereInput>>;
   password?: Maybe<StringFilter>;
-  posts?: Maybe<PostFilter>;
-  role?: Maybe<Role>;
+  posts?: Maybe<PostListRelationFilter>;
+  role?: Maybe<EnumRoleFilter>;
   surname?: Maybe<StringFilter>;
 };
 
@@ -819,14 +1057,14 @@ export type UserLoginMutationVariables = Exact<{
 
 export type UserLoginMutation = (
   { __typename?: 'Mutation' }
-  & { userLogin: (
+  & { userLogin?: Maybe<(
     { __typename?: 'AuthPayload' }
     & Pick<AuthPayload, 'token' | 'error'>
-    & { user: (
+    & { user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'role'>
-    ) }
-  ) }
+      & Pick<User, 'id'>
+    )> }
+  )> }
 );
 
 export type UserSignupMutationVariables = Exact<{
@@ -839,14 +1077,29 @@ export type UserSignupMutationVariables = Exact<{
 
 export type UserSignupMutation = (
   { __typename?: 'Mutation' }
-  & { userSignup: (
+  & { userSignup?: Maybe<(
     { __typename?: 'AuthPayload' }
-    & Pick<AuthPayload, 'token'>
-    & { user: (
+    & Pick<AuthPayload, 'token' | 'error'>
+    & { user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'name' | 'surname' | 'email'>
-    ) }
-  ) }
+      & Pick<User, 'id'>
+    )> }
+  )> }
+);
+
+export type FindManyPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindManyPostQuery = (
+  { __typename?: 'Query' }
+  & { posts: Array<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'title' | 'content'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name'>
+    )> }
+  )> }
 );
 
 export type UserFieldsFragment = (

@@ -53,7 +53,7 @@ function MainLayout(props: MainLayoutProps) {
   const classes = useStyles()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const widthContent = !isMobile ? 'xl' : 'sm'
+  const widthContent = !isMobile ? 'lg' : 'sm'
   const [openSidebar, setOpenSidebar] = useState<boolean>(false)
   const handleSidebarClose = () => setOpenSidebar(false)
   const handleSidebarOpen = () => setOpenSidebar(true)
@@ -61,14 +61,11 @@ function MainLayout(props: MainLayoutProps) {
 
   return (
     <React.Fragment>
-      <Container maxWidth="lg">
+      <Container maxWidth={widthContent}>
         <WithTitle title={props.title} />
         <Header title={props.title} toggleSidebar={toggleSidebar} sections={sections} />
         <Sidebar open={openSidebar} onOpen={handleSidebarOpen} onClose={handleSidebarClose} />
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Container maxWidth={widthContent}>{props.children}</Container>
-        </main>
+        <main>{props.children}</main>
       </Container>
       <Footer />
     </React.Fragment>

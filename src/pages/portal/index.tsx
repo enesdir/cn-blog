@@ -1,7 +1,7 @@
 import { Paper, Typography } from '@material-ui/core'
 
 import Layout from '@app/components/layouts/Portal'
-import Link from 'next/link'
+import Link from '@app/components/common/Link'
 import React from 'react'
 import { getUsersQuery } from '@graphql/user/getUsers'
 import { useAuthState } from '@app/contexts/authContext'

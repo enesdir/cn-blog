@@ -1,20 +1,24 @@
-import Document, { Head, Main, NextScript } from 'next/document'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 import React from 'react'
-import { ServerStyleSheets } from '@material-ui/styles'
+import { ServerStyleSheets } from '@material-ui/core/styles'
+import { cache } from './_app'
+import createEmotionServer from 'create-emotion-server'
 import { themeColor } from '@app/contexts/ThemeContext'
+
+const { extractCritical } = createEmotionServer(cache)
 
 export default class MyDocument extends Document {
   render() {
     return (
-      <html lang="en" dir="ltr">
+      <Html lang="en" dir="ltr">
         <Head>
           <meta charSet="utf-8" />
           {/* PWA primary color */}
           <meta name="theme-color" content={themeColor} />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           <link rel="shortcut icon" href="/static/favicon.ico" />
         </Head>
@@ -22,13 +26,13 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with server-side generation (SSG).
+// it's compatible with static-site generation (SSG).
 MyDocument.getInitialProps = async ctx => {
   // Resolution order
   //
@@ -62,10 +66,20 @@ MyDocument.getInitialProps = async ctx => {
     })
 
   const initialProps = await Document.getInitialProps(ctx)
+  const styles = extractCritical(initialProps.html)
 
   return {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.
-    styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+    styles: [
+      ...React.Children.toArray(initialProps.styles),
+      sheets.getStyleElement(),
+      <style
+        key="emotion-style-tag"
+        data-emotion-css={styles.ids.join(' ')}
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: styles.css }}
+      />,
+    ],
   }
 }

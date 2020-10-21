@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     headerTitle: {
-      flexGrow: 1,
+      flex: 1,
     },
     toolbar: {
       borderBottom: `1px solid ${theme.palette.divider}`,
