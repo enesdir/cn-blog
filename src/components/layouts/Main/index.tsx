@@ -47,6 +47,7 @@ const sections = [
 interface MainLayoutProps {
   children: React.ReactNode
   title: string
+  headTitle?: string
 }
 
 function MainLayout(props: MainLayoutProps) {
@@ -58,11 +59,11 @@ function MainLayout(props: MainLayoutProps) {
   const handleSidebarClose = () => setOpenSidebar(false)
   const handleSidebarOpen = () => setOpenSidebar(true)
   const toggleSidebar = () => setOpenSidebar(prev => (prev = !prev))
-
+  const headTitle = props.headTitle ?? props.title
   return (
     <React.Fragment>
       <Container maxWidth={widthContent}>
-        <WithTitle title={props.title} />
+        <WithTitle title={headTitle} />
         <Header title={props.title} toggleSidebar={toggleSidebar} sections={sections} />
         <Sidebar open={openSidebar} onOpen={handleSidebarOpen} onClose={handleSidebarClose} />
         <main>{props.children}</main>

@@ -6,7 +6,8 @@
     "home": "Welcome My Blog App",
     "portal": "Welcome Admin Panel of Blog App",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "post": "Post"
   },
   "errors": {
     "inactivity_logged_out": "We have logged you out for security reasons."
