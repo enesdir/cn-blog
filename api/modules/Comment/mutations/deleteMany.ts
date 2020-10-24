@@ -8,8 +8,7 @@ export const CommentDeleteManyMutation = mutationField('deleteManyComment', {
       nullable: true,
     }),
   },
-  resolve: async (_parent, { where }, ctx) => {
-    await ctx.prisma.onDelete({ model: 'Comment', where })
+  resolve(_parent, { where }, ctx) {
     return ctx.prisma.comment.deleteMany({ where })
   },
 })
