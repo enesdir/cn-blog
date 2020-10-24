@@ -1087,17 +1087,34 @@ export type UserSignupMutation = (
   )> }
 );
 
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindOnePostQueryVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
 
 
-export type PostsQuery = (
+export type FindOnePostQuery = (
+  { __typename?: 'Query' }
+  & { findOnePost?: Maybe<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'title' | 'content' | 'published'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name'>
+    )> }
+  )> }
+);
+
+export type FindManyPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindManyPostQuery = (
   { __typename?: 'Query' }
   & { posts: Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'content'>
+    & Pick<Post, 'id' | 'title' | 'content' | 'published'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'fullName'>
+      & Pick<User, 'id' | 'name'>
     )> }
   )> }
 );

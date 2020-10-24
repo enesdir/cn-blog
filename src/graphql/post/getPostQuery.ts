@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
-export const getPostsQuery = gql`
-  query findManyPost {
-    posts(where: { published: { equals: true } }, orderBy: { createdAt: desc }) {
+export const getPostQuery = gql`
+  query findOnePost($postId: Int!) {
+    findOnePost(where: { id: $postId }) {
       id
       title
       author {

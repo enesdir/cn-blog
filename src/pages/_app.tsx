@@ -33,15 +33,15 @@ function BlogApp(props: PuffyAppProps) {
 
   return (
     <CacheProvider value={cache}>
-      <GlobalHead />
-      <AuthProvider token={token} authed={authed}>
-        <ThemeProvider>
-          <CssBaseline />
-          <ApolloProvider client={apolloClient}>
+      <ThemeProvider>
+        <CssBaseline />
+        <GlobalHead />
+        <ApolloProvider client={apolloClient}>
+          <AuthProvider token={token} authed={authed}>
             <Component {...pageProps} />
-          </ApolloProvider>
-        </ThemeProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </ApolloProvider>
+      </ThemeProvider>
     </CacheProvider>
   )
 }

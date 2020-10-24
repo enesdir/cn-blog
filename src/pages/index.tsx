@@ -1,9 +1,13 @@
+import FacebookIcon from '@material-ui/icons/Facebook'
 import FeaturedArea from '@app/components/layouts/Main/FeaturedArea'
+import GitHubIcon from '@material-ui/icons/GitHub'
 import Grid from '@material-ui/core/Grid'
 import MainLayout from '@app/components/layouts/Main'
 import Post from '@app/components/Post'
 import PostsArea from '@app/components/layouts/Main/PostsArea'
 import React from 'react'
+import RightColumnArea from '@app/components/layouts/Main/RightColumnArea'
+import TwitterIcon from '@material-ui/icons/Twitter'
 import { getPostsQuery } from '@graphql/post/getPostsQuery'
 import { makeStyles } from '@material-ui/core/styles'
 import { useQuery } from '@apollo/client'
@@ -24,6 +28,30 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const rightColumnArea = {
+  title: 'About',
+  description:
+    'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
+  archives: [
+    { title: 'October 2020', url: '#' },
+    { title: 'September 2020', url: '#' },
+    { title: 'August 2020', url: '#' },
+    { title: 'July 2020', url: '#' },
+    { title: 'June 2020', url: '#' },
+    { title: 'May 2020', url: '#' },
+    { title: 'April 2020', url: '#' },
+    { title: 'March 2020', url: '#' },
+    { title: 'February 2020', url: '#' },
+    { title: 'January 2020', url: '#' },
+    { title: 'November 2019', url: '#' },
+  ],
+  social: [
+    { name: 'GitHub', icon: GitHubIcon, url: '#' },
+    { name: 'Twitter', icon: TwitterIcon, url: '#' },
+    { name: 'Facebook', icon: FacebookIcon, url: '#' },
+  ],
+}
+
 const HomePage = () => {
   const { loading, error, data } = useQuery(getPostsQuery)
   const classes = useStyles()
@@ -38,13 +66,17 @@ const HomePage = () => {
     <MainLayout title={t('title.home')}>
       <FeaturedArea post={mainFeaturedPost} />
       <Grid container spacing={5} className={classes.mainGrid}>
-        <PostsArea title="From the firehose">
+        <PostsArea title="My Blog Posts">
           {data.posts.map(post => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
+            <Post key={post.id} post={post} />
           ))}
         </PostsArea>
+        <RightColumnArea
+          title={rightColumnArea.title}
+          description={rightColumnArea.description}
+          archives={rightColumnArea.archives}
+          social={rightColumnArea.social}
+        />
       </Grid>
     </MainLayout>
   )
