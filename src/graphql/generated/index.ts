@@ -1099,7 +1099,7 @@ export type FindOnePostQuery = (
     & Pick<Post, 'id' | 'title' | 'content' | 'published'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'name'>
+      & Pick<User, 'id' | 'fullName'>
     )> }
   )> }
 );
@@ -1114,7 +1114,7 @@ export type FindManyPostQuery = (
     & Pick<Post, 'id' | 'title' | 'content' | 'published'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'name'>
+      & Pick<User, 'id' | 'fullName'>
     )> }
   )> }
 );

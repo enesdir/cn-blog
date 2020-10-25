@@ -7,7 +7,7 @@ export const getPostsQuery = gql`
       title
       author {
         id
-        name
+        fullName
       }
       content
       published
