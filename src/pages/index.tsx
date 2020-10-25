@@ -3,7 +3,6 @@ import FeaturedArea from '@app/components/layouts/Main/FeaturedArea'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import Grid from '@material-ui/core/Grid'
 import MainLayout from '@app/components/layouts/Main'
-import Post from '@app/components/Post'
 import PostsArea from '@app/components/layouts/Main/PostsArea'
 import React from 'react'
 import RightColumnArea from '@app/components/layouts/Main/RightColumnArea'
@@ -24,7 +23,7 @@ const mainFeaturedPost = {
 
 const useStyles = makeStyles(theme => ({
   mainGrid: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
 }))
 
@@ -65,12 +64,8 @@ const HomePage = () => {
   return (
     <MainLayout title={t('title.home')}>
       <FeaturedArea post={mainFeaturedPost} />
-      <Grid container spacing={5} className={classes.mainGrid}>
-        <PostsArea title="My Blog Posts">
-          {data.posts.map(post => (
-            <Post key={post.id} post={post} />
-          ))}
-        </PostsArea>
+      <Grid container spacing={3} className={classes.mainGrid}>
+        <PostsArea title="My Blog Posts" posts={data.posts} />
         <RightColumnArea
           title={rightColumnArea.title}
           description={rightColumnArea.description}
