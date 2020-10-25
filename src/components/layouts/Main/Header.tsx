@@ -8,7 +8,7 @@ import React from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import UserMenu from '@app/components/layouts/Portal/UserMenu'
+import UserMenu from '@app/components/layouts/shared/UserMenu'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

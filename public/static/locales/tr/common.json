@@ -10,6 +10,6 @@
     "post": "Gönderi"
   },
   "errors": {
-    "inactivity_logged_out": "size daha fazla tahammül edemedik kovduk."
+    "inactivity_logged_out": "Güvenliğiniz için hesabınızdan çıkış yapıldı."
   }
 }

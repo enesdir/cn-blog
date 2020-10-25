@@ -5,10 +5,7 @@ import HamburgerMenuIcon from '@app/components/layouts/shared/HamburgerMenuIcon'
 import React from 'react'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import UserMenu from '@app/components/layouts/Portal/UserMenu'
-
-// import { useAuth } from 'hooks/auth-context'
-// import { useUserState } from 'hooks/user-context'
+import UserMenu from '@app/components/layouts/shared/UserMenu'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

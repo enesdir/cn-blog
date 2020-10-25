@@ -1,11 +1,20 @@
 {
   "name": "cn-blog",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.5",
   "description": "Fullstack Blog Application with Next.js",
   "homepage": "https://www.github.com/codenuru",
+  "author": "enes esen",
+  "license": "MIT",
   "engines": {
     "node": ">=12.0.0"
   },
+  "keywords": [
+    "React",
+    "NextJS",
+    "GraphQL",
+    "Nexus",
+    "Prisma"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/codenuru/cn-blog"
@@ -26,15 +35,6 @@
     "introspect": "prisma introspect",
     "analyze": "cross-env ANALYZE=true next build"
   },
-  "keywords": [
-    "React",
-    "NextJS",
-    "GraphQL",
-    "Nexus",
-    "Prisma"
-  ],
-  "author": "Puffy Tech",
-  "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.2.5",
     "@emotion/cache": "^10.0.29",

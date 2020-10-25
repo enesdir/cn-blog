@@ -58,7 +58,6 @@ export default function Sidebar(props: SidebarProps) {
       <MenuItems />
     </React.Fragment>
   )
-  console.log(isMobile)
   return (
     <nav>
       <SwipeableDrawer
