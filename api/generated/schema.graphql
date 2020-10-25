@@ -21,6 +21,119 @@ input BoolFilter {
   not: NestedBoolFilter
 }
 
+type Category {
+  id: Int!
+  name: String!
+  post: Post
+  postId: Int
+  slug: String!
+}
+
+input CategoryCreateInput {
+  name: String!
+  post: PostCreateOneWithoutCategoriesInput!
+  slug: String!
+}
+
+input CategoryCreateManyWithoutPostInput {
+  connect: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateWithoutPostInput!]
+}
+
+input CategoryCreateWithoutPostInput {
+  name: String!
+  slug: String!
+}
+
+input CategoryListRelationFilter {
+  every: CategoryWhereInput
+  none: CategoryWhereInput
+  some: CategoryWhereInput
+}
+
+input CategoryOrderByInput {
+  id: SortOrder
+  name: SortOrder
+  postId: SortOrder
+  slug: SortOrder
+}
+
+input CategoryScalarWhereInput {
+  AND: [CategoryScalarWhereInput!]
+  id: IntFilter
+  name: StringFilter
+  NOT: [CategoryScalarWhereInput!]
+  OR: [CategoryScalarWhereInput!]
+  postId: IntFilter
+  slug: StringFilter
+}
+
+input CategoryUpdateInput {
+  name: StringFieldUpdateOperationsInput
+  post: PostUpdateOneRequiredWithoutCategoriesInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input CategoryUpdateManyDataInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input CategoryUpdateManyMutationInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input CategoryUpdateManyWithoutPostInput {
+  connect: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateWithoutPostInput!]
+  delete: [CategoryWhereUniqueInput!]
+  deleteMany: [CategoryScalarWhereInput!]
+  disconnect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  update: [CategoryUpdateWithWhereUniqueWithoutPostInput!]
+  updateMany: [CategoryUpdateManyWithWhereNestedInput!]
+  upsert: [CategoryUpsertWithWhereUniqueWithoutPostInput!]
+}
+
+input CategoryUpdateManyWithWhereNestedInput {
+  data: CategoryUpdateManyDataInput!
+  where: CategoryScalarWhereInput!
+}
+
+input CategoryUpdateWithoutPostDataInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input CategoryUpdateWithWhereUniqueWithoutPostInput {
+  data: CategoryUpdateWithoutPostDataInput!
+  where: CategoryWhereUniqueInput!
+}
+
+input CategoryUpsertWithWhereUniqueWithoutPostInput {
+  create: CategoryCreateWithoutPostInput!
+  update: CategoryUpdateWithoutPostDataInput!
+  where: CategoryWhereUniqueInput!
+}
+
+input CategoryWhereInput {
+  AND: [CategoryWhereInput!]
+  id: IntFilter
+  name: StringFilter
+  NOT: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  post: PostWhereInput
+  postId: IntFilter
+  slug: StringFilter
+}
+
+input CategoryWhereUniqueInput {
+  id: Int
+  name: String
+  slug: String
+}
+
 type Comment {
   author: User
   authorId: Int
@@ -255,23 +368,35 @@ input IntNullableFilter {
 
 type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User
+  createOneCategory(data: CategoryCreateInput!): Category!
   createOneComment(data: CommentCreateInput!): Comment!
   createOnePost(data: PostCreateInput!): Post!
+  createOneTag(data: TagCreateInput!): Tag!
   createOneUser(data: UserCreateInput!): User!
+  deleteManyCategory(where: CategoryWhereInput): BatchPayload
   deleteManyComment(where: CommentWhereInput): BatchPayload
   deleteManyPost(where: PostWhereInput): BatchPayload
+  deleteManyTag(where: TagWhereInput): BatchPayload
   deleteManyUser(where: UserWhereInput): BatchPayload
+  deleteOneCategory(where: CategoryWhereUniqueInput!): Category
   deleteOneComment(where: CommentWhereUniqueInput!): Comment
   deleteOnePost(where: PostWhereUniqueInput!): Post
+  deleteOneTag(where: TagWhereUniqueInput!): Tag
   deleteOneUser(where: UserWhereUniqueInput!): User
+  updateManyCategory(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload
   updateManyComment(data: CommentUpdateManyMutationInput!, where: CommentWhereInput): BatchPayload
   updateManyPost(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload
+  updateManyTag(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload
+  updateOneCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category!
   updateOneComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment!
   updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post!
+  updateOneTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag!
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+  upsertOneCategory(create: CategoryCreateInput!, update: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category!
   upsertOneComment(create: CommentCreateInput!, update: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment!
   upsertOnePost(create: PostCreateInput!, update: PostUpdateInput!, where: PostWhereUniqueInput!): Post!
+  upsertOneTag(create: TagCreateInput!, update: TagUpdateInput!, where: TagWhereUniqueInput!): Tag!
   upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
 
   """Login mutation: Send your email and password then get back a token"""
@@ -367,13 +492,16 @@ input NullableStringFieldUpdateOperationsInput {
 }
 
 type Post {
-  author: User
-  authorId: Int
-  comments(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment!]!
+  author: User!
+  authorId: Int!
+  categories: [Category!]
+  comments(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment!]
   content: String
   createdAt: DateTime!
   id: Int!
+  likeCount: Int
   published: Boolean!
+  tags: [Tag!]
   title: String
   updatedAt: DateTime!
   viewCount: Int
@@ -381,10 +509,13 @@ type Post {
 
 input PostCreateInput {
   author: UserCreateOneWithoutPostsInput
+  categories: CategoryCreateManyWithoutPostInput
   comments: CommentCreateManyWithoutPostInput
   content: String
   createdAt: DateTime
+  likeCount: Int
   published: Boolean
+  tags: TagCreateManyWithoutPostInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
@@ -395,16 +526,42 @@ input PostCreateManyWithoutAuthorInput {
   create: [PostCreateWithoutAuthorInput!]
 }
 
+input PostCreateOneWithoutCategoriesInput {
+  connect: PostWhereUniqueInput
+  create: PostCreateWithoutCategoriesInput
+}
+
 input PostCreateOneWithoutCommentsInput {
   connect: PostWhereUniqueInput
   create: PostCreateWithoutCommentsInput
 }
 
+input PostCreateOneWithoutTagsInput {
+  connect: PostWhereUniqueInput
+  create: PostCreateWithoutTagsInput
+}
+
 input PostCreateWithoutAuthorInput {
+  categories: CategoryCreateManyWithoutPostInput
   comments: CommentCreateManyWithoutPostInput
   content: String
   createdAt: DateTime
+  likeCount: Int
   published: Boolean
+  tags: TagCreateManyWithoutPostInput
+  title: String!
+  updatedAt: DateTime
+  viewCount: Int
+}
+
+input PostCreateWithoutCategoriesInput {
+  author: UserCreateOneWithoutPostsInput
+  comments: CommentCreateManyWithoutPostInput
+  content: String
+  createdAt: DateTime
+  likeCount: Int
+  published: Boolean
+  tags: TagCreateManyWithoutPostInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
@@ -412,8 +569,24 @@ input PostCreateWithoutAuthorInput {
 
 input PostCreateWithoutCommentsInput {
   author: UserCreateOneWithoutPostsInput
+  categories: CategoryCreateManyWithoutPostInput
   content: String
   createdAt: DateTime
+  likeCount: Int
+  published: Boolean
+  tags: TagCreateManyWithoutPostInput
+  title: String!
+  updatedAt: DateTime
+  viewCount: Int
+}
+
+input PostCreateWithoutTagsInput {
+  author: UserCreateOneWithoutPostsInput
+  categories: CategoryCreateManyWithoutPostInput
+  comments: CommentCreateManyWithoutPostInput
+  content: String
+  createdAt: DateTime
+  likeCount: Int
   published: Boolean
   title: String!
   updatedAt: DateTime
@@ -431,6 +604,7 @@ input PostOrderByInput {
   content: SortOrder
   createdAt: SortOrder
   id: SortOrder
+  likeCount: SortOrder
   published: SortOrder
   title: SortOrder
   updatedAt: SortOrder
@@ -443,6 +617,7 @@ input PostScalarWhereInput {
   content: StringNullableFilter
   createdAt: DateTimeFilter
   id: IntFilter
+  likeCount: IntFilter
   NOT: [PostScalarWhereInput!]
   OR: [PostScalarWhereInput!]
   published: BoolFilter
@@ -453,10 +628,13 @@ input PostScalarWhereInput {
 
 input PostUpdateInput {
   author: UserUpdateOneWithoutPostsInput
+  categories: CategoryUpdateManyWithoutPostInput
   comments: CommentUpdateManyWithoutPostInput
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
+  tags: TagUpdateManyWithoutPostInput
   title: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   viewCount: IntFieldUpdateOperationsInput
@@ -465,6 +643,7 @@ input PostUpdateInput {
 input PostUpdateManyDataInput {
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -474,6 +653,7 @@ input PostUpdateManyDataInput {
 input PostUpdateManyMutationInput {
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -497,6 +677,13 @@ input PostUpdateManyWithWhereNestedInput {
   where: PostScalarWhereInput!
 }
 
+input PostUpdateOneRequiredWithoutCategoriesInput {
+  connect: PostWhereUniqueInput
+  create: PostCreateWithoutCategoriesInput
+  update: PostUpdateWithoutCategoriesDataInput
+  upsert: PostUpsertWithoutCategoriesInput
+}
+
 input PostUpdateOneRequiredWithoutCommentsInput {
   connect: PostWhereUniqueInput
   create: PostCreateWithoutCommentsInput
@@ -504,11 +691,34 @@ input PostUpdateOneRequiredWithoutCommentsInput {
   upsert: PostUpsertWithoutCommentsInput
 }
 
+input PostUpdateOneRequiredWithoutTagsInput {
+  connect: PostWhereUniqueInput
+  create: PostCreateWithoutTagsInput
+  update: PostUpdateWithoutTagsDataInput
+  upsert: PostUpsertWithoutTagsInput
+}
+
 input PostUpdateWithoutAuthorDataInput {
+  categories: CategoryUpdateManyWithoutPostInput
   comments: CommentUpdateManyWithoutPostInput
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
+  tags: TagUpdateManyWithoutPostInput
+  title: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  viewCount: IntFieldUpdateOperationsInput
+}
+
+input PostUpdateWithoutCategoriesDataInput {
+  author: UserUpdateOneWithoutPostsInput
+  comments: CommentUpdateManyWithoutPostInput
+  content: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
+  published: BoolFieldUpdateOperationsInput
+  tags: TagUpdateManyWithoutPostInput
   title: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   viewCount: IntFieldUpdateOperationsInput
@@ -516,8 +726,24 @@ input PostUpdateWithoutAuthorDataInput {
 
 input PostUpdateWithoutCommentsDataInput {
   author: UserUpdateOneWithoutPostsInput
+  categories: CategoryUpdateManyWithoutPostInput
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
+  published: BoolFieldUpdateOperationsInput
+  tags: TagUpdateManyWithoutPostInput
+  title: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  viewCount: IntFieldUpdateOperationsInput
+}
+
+input PostUpdateWithoutTagsDataInput {
+  author: UserUpdateOneWithoutPostsInput
+  categories: CategoryUpdateManyWithoutPostInput
+  comments: CommentUpdateManyWithoutPostInput
+  content: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  likeCount: IntFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -529,9 +755,19 @@ input PostUpdateWithWhereUniqueWithoutAuthorInput {
   where: PostWhereUniqueInput!
 }
 
+input PostUpsertWithoutCategoriesInput {
+  create: PostCreateWithoutCategoriesInput!
+  update: PostUpdateWithoutCategoriesDataInput!
+}
+
 input PostUpsertWithoutCommentsInput {
   create: PostCreateWithoutCommentsInput!
   update: PostUpdateWithoutCommentsDataInput!
+}
+
+input PostUpsertWithoutTagsInput {
+  create: PostCreateWithoutTagsInput!
+  update: PostUpdateWithoutTagsDataInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutAuthorInput {
@@ -544,13 +780,16 @@ input PostWhereInput {
   AND: [PostWhereInput!]
   author: UserWhereInput
   authorId: IntNullableFilter
+  categories: CategoryListRelationFilter
   comments: CommentListRelationFilter
   content: StringNullableFilter
   createdAt: DateTimeFilter
   id: IntFilter
+  likeCount: IntFilter
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]
   published: BoolFilter
+  tags: TagListRelationFilter
   title: StringFilter
   updatedAt: DateTimeFilter
   viewCount: IntFilter
@@ -561,6 +800,7 @@ input PostWhereUniqueInput {
 }
 
 type Query {
+  categories(after: CategoryWhereUniqueInput, before: CategoryWhereUniqueInput, first: Int, last: Int, orderBy: [CategoryOrderByInput!], where: CategoryWhereInput): [Category!]!
   comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int, orderBy: [CommentOrderByInput!], where: CommentWhereInput): [Comment!]!
   findManyComment(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment]
   findManyCommentCount(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): Int
@@ -575,6 +815,7 @@ type Query {
   """The current authenticated User"""
   me: User
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
+  tags(after: TagWhereUniqueInput, before: TagWhereUniqueInput, first: Int, last: Int, orderBy: [TagOrderByInput!], where: TagWhereInput): [Tag!]!
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
 
@@ -633,6 +874,119 @@ input StringNullableFilter {
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
+}
+
+type Tag {
+  id: Int!
+  name: String!
+  post: Post
+  postId: Int
+  slug: String!
+}
+
+input TagCreateInput {
+  name: String!
+  post: PostCreateOneWithoutTagsInput!
+  slug: String!
+}
+
+input TagCreateManyWithoutPostInput {
+  connect: [TagWhereUniqueInput!]
+  create: [TagCreateWithoutPostInput!]
+}
+
+input TagCreateWithoutPostInput {
+  name: String!
+  slug: String!
+}
+
+input TagListRelationFilter {
+  every: TagWhereInput
+  none: TagWhereInput
+  some: TagWhereInput
+}
+
+input TagOrderByInput {
+  id: SortOrder
+  name: SortOrder
+  postId: SortOrder
+  slug: SortOrder
+}
+
+input TagScalarWhereInput {
+  AND: [TagScalarWhereInput!]
+  id: IntFilter
+  name: StringFilter
+  NOT: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  postId: IntFilter
+  slug: StringFilter
+}
+
+input TagUpdateInput {
+  name: StringFieldUpdateOperationsInput
+  post: PostUpdateOneRequiredWithoutTagsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input TagUpdateManyDataInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input TagUpdateManyMutationInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input TagUpdateManyWithoutPostInput {
+  connect: [TagWhereUniqueInput!]
+  create: [TagCreateWithoutPostInput!]
+  delete: [TagWhereUniqueInput!]
+  deleteMany: [TagScalarWhereInput!]
+  disconnect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  update: [TagUpdateWithWhereUniqueWithoutPostInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+  upsert: [TagUpsertWithWhereUniqueWithoutPostInput!]
+}
+
+input TagUpdateManyWithWhereNestedInput {
+  data: TagUpdateManyDataInput!
+  where: TagScalarWhereInput!
+}
+
+input TagUpdateWithoutPostDataInput {
+  name: StringFieldUpdateOperationsInput
+  slug: StringFieldUpdateOperationsInput
+}
+
+input TagUpdateWithWhereUniqueWithoutPostInput {
+  data: TagUpdateWithoutPostDataInput!
+  where: TagWhereUniqueInput!
+}
+
+input TagUpsertWithWhereUniqueWithoutPostInput {
+  create: TagCreateWithoutPostInput!
+  update: TagUpdateWithoutPostDataInput!
+  where: TagWhereUniqueInput!
+}
+
+input TagWhereInput {
+  AND: [TagWhereInput!]
+  id: IntFilter
+  name: StringFilter
+  NOT: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  post: PostWhereInput
+  postId: IntFilter
+  slug: StringFilter
+}
+
+input TagWhereUniqueInput {
+  id: Int
+  name: String
+  slug: String
 }
 
 """A user registered with the application"""

@@ -10,10 +10,11 @@ export const Post = objectType({
     })
     t.boolean('published', { nullable: false })
     t.int('viewCount')
-    t.int('authorId', { nullable: true })
+    t.int('likeCount')
+    t.int('authorId', { nullable: false })
     t.field('author', {
       type: 'User',
-      nullable: true,
+      nullable: false,
       resolve: (_parent, _args, ctx) =>
         ctx.prisma.post
           .findOne({
@@ -21,8 +22,24 @@ export const Post = objectType({
           })
           .author(),
     })
+    t.field('tags', {
+      nullable: true,
+      list: [true],
+      type: 'Tag',
+      resolve(parent: any) {
+        return parent['tags']
+      },
+    })
+    t.field('categories', {
+      nullable: true,
+      list: [true],
+      type: 'Category',
+      resolve(parent: any) {
+        return parent['categories']
+      },
+    })
     t.field('comments', {
-      nullable: false,
+      nullable: true,
       list: [true],
       type: 'Comment',
       args: {

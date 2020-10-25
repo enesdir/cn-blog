@@ -9,8 +9,31 @@ export const getPostQuery = gql`
         id
         fullName
       }
+      categories {
+        id
+        slug
+        name
+      }
+      tags {
+        id
+        slug
+        name
+      }
+      comments {
+        id
+        contain
+        author {
+          id
+          fullName
+        }
+        createdAt
+      }
       content
       published
+      viewCount
+      likeCount
+      createdAt
+      updatedAt
     }
   }
 `
