@@ -1,4 +1,4 @@
-import { objectType } from '@nexus/schema'
+import { idArg, objectType } from '@nexus/schema'
 
 export const Tag = objectType({
   name: 'Tag',
@@ -6,16 +6,31 @@ export const Tag = objectType({
     t.int('id', { nullable: false })
     t.string('name', { nullable: false })
     t.string('slug', { nullable: false })
-    t.int('postId', { nullable: true })
-    t.field('post', {
+    t.list.field('posts', {
       type: 'Post',
-      nullable: true,
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
+      nullable: false,
+      args: {
+        where: 'PostWhereInput',
+        orderBy: 'PostOrderByInput',
+        cursor: 'PostWhereUniqueInput',
+        take: 'Int',
+        skip: 'Int',
+      },
+      resolve: (parent, _, ctx) =>
+        ctx.prisma.tag
           .findOne({
-            where: { id: Number(_parent.id) },
+            where: { id: Number(parent.id) },
           })
-          .post(),
+          .posts(),
+    })
+    t.field('postCount', {
+      type: 'Int',
+      nullable: false,
+      resolve(root, {}, context) {
+        return context.prisma.post.count({
+          where: { tags: { some: { id: root.id } } },
+        })
+      },
     })
   },
 })

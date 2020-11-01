@@ -6,16 +6,29 @@ export const Category = objectType({
     t.int('id', { nullable: false })
     t.string('name', { nullable: false })
     t.string('slug', { nullable: false })
-    t.int('postId', { nullable: true })
-    t.field('post', {
-      type: 'Post',
+    t.field('posts', {
       nullable: true,
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
-          .findOne({
-            where: { id: Number(_parent.id) },
-          })
-          .post(),
+      list: [true],
+      type: 'Post',
+      args: {
+        where: 'PostWhereInput',
+        orderBy: 'PostOrderByInput',
+        cursor: 'PostWhereUniqueInput',
+        take: 'Int',
+        skip: 'Int',
+      },
+      resolve(parent: any) {
+        return parent['posts']
+      },
+    })
+    t.field('postCount', {
+      type: 'Int',
+      nullable: false,
+      resolve(root, {}, context) {
+        return context.prisma.post.count({
+          where: { categories: { some: { id: root.id } } },
+        })
+      },
     })
   },
 })

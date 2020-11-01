@@ -22,25 +22,42 @@ export const Post = objectType({
           })
           .author(),
     })
-    t.field('tags', {
-      nullable: true,
-      list: [true],
+    t.list.field('tags', {
       type: 'Tag',
-      resolve(parent: any) {
-        return parent['tags']
-      },
-    })
-    t.field('categories', {
       nullable: true,
-      list: [true],
+      args: {
+        where: 'TagWhereInput',
+        orderBy: 'TagOrderByInput',
+        cursor: 'TagWhereUniqueInput',
+        take: 'Int',
+        skip: 'Int',
+      },
+      resolve: (_parent, _args, ctx) =>
+        ctx.prisma.post
+          .findOne({
+            where: { id: Number(_parent.id) },
+          })
+          .tags(),
+    })
+    t.list.field('categories', {
+      nullable: true,
       type: 'Category',
-      resolve(parent: any) {
-        return parent['categories']
+      args: {
+        where: 'CategoryWhereInput',
+        orderBy: 'CategoryOrderByInput',
+        cursor: 'CategoryWhereUniqueInput',
+        take: 'Int',
+        skip: 'Int',
       },
+      resolve: (_parent, _args, ctx) =>
+        ctx.prisma.post
+          .findOne({
+            where: { id: Number(_parent.id) },
+          })
+          .categories(),
     })
-    t.field('comments', {
+    t.list.field('comments', {
       nullable: true,
-      list: [true],
       type: 'Comment',
       args: {
         where: 'CommentWhereInput',
@@ -49,8 +66,20 @@ export const Post = objectType({
         take: 'Int',
         skip: 'Int',
       },
-      resolve(parent: any) {
-        return parent['comments']
+      resolve: (_parent, _args, ctx) =>
+        ctx.prisma.post
+          .findOne({
+            where: { id: Number(_parent.id) },
+          })
+          .comments(),
+    })
+    t.field('commentCount', {
+      type: 'Int',
+      nullable: false,
+      resolve(root, {}, context) {
+        return context.prisma.post.count({
+          where: { comments: { some: { id: root.id } } },
+        })
       },
     })
     t.field('createdAt', { nullable: false, type: 'DateTime' })
