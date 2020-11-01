@@ -18,7 +18,7 @@ This example shows how to implement a **fullstack app in TypeScript with** using
 - **[Apollo GraphQL client](https://github.com/apollographql/apollo-client)** with graphql-codegen
 - **[Prisma](https://github.com/prisma/prisma)** Modern DB toolkit to query, migrate and model your database
 - **[Nexus](https://github.com/graphql-nexus/schema)** Code-First, Type-Safe, GraphQL Schema Construction
-- **[I18next](https://github.com/i18next/i18next)** to support English and Russian translations
+- **[I18next](https://github.com/i18next/i18next)** to support English and Turkish translations
 - **[ESLint](https://eslint.org/)** and **[Prettier](https://prettier.io/)** to ensure that source files are error-free and easy to read
 
 ## Table of Contents
@@ -150,12 +150,16 @@ For the following example scenario, assume you want to add a "profile" feature t
 - [x] Documentation
 - [x] i18n
 - [x] A good settings configuration
+- [x] Add CRUD operations Tag and Category
+- [x] (Main) Show Posts and Post Page
 - [ ] (Portal) Create Post Page
-- [ ] (Main) Show Posts and Post Page
+- [ ] (Main) Implement Tag and Category
+- [ ] (Portal) Create Tag and Category
 - [ ] (Portal) Create and Manage User Page
 - [ ] (Main) Create Comment Component
 - [ ] (Main) Show Comments in Post Page
 - [ ] (Portal) Manage Comment
 - [ ] (Main) Show User's Posts
+- [ ] Update: React 17 and nextJS 10
 - [ ] Fix: Getting loop different lang
 - [ ] Fix: Client auth working even though token invalid
