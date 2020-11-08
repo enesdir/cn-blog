@@ -5,9 +5,6 @@ Fullstack Blog Application with Next.js (GraphQL API)
 Note: This project is working in progress.
 ![CN-Blog](https://i.ibb.co/Z6cfgcC/scrnli-11-9-2020-12-48-37-AM.png)
 
-**Demo**
-[Demo](https://cn-blog.vercel.app/)
-
 ## Getting Started
 
 This is a fully-featured starter kit, which should enable fast, secure development of advanced applications.

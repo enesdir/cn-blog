@@ -1,7 +1,6 @@
 {
-  "name": "cn-blog",
   "version": 2,
-  "regions": ["am1", "cdg1"],
+  "regions": ["am1"],
   "build": {
     "env": {
       "NODE_ENV" : "production",
