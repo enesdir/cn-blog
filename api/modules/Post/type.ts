@@ -15,8 +15,8 @@ export const Post = objectType({
     t.field('author', {
       type: 'User',
       nullable: false,
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
+      resolve: (_parent, _args, { prisma }) =>
+        prisma.post
           .findOne({
             where: { id: Number(_parent.id) },
           })
@@ -27,13 +27,9 @@ export const Post = objectType({
       nullable: true,
       args: {
         where: 'TagWhereInput',
-        orderBy: 'TagOrderByInput',
-        cursor: 'TagWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
       },
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
+      resolve: (_parent, _args, { prisma }) =>
+        prisma.post
           .findOne({
             where: { id: Number(_parent.id) },
           })
@@ -44,13 +40,9 @@ export const Post = objectType({
       type: 'Category',
       args: {
         where: 'CategoryWhereInput',
-        orderBy: 'CategoryOrderByInput',
-        cursor: 'CategoryWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
       },
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
+      resolve: (_parent, _args, { prisma }) =>
+        prisma.post
           .findOne({
             where: { id: Number(_parent.id) },
           })
@@ -66,8 +58,8 @@ export const Post = objectType({
         take: 'Int',
         skip: 'Int',
       },
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
+      resolve: (_parent, _args, { prisma }) =>
+        prisma.post
           .findOne({
             where: { id: Number(_parent.id) },
           })
@@ -76,8 +68,8 @@ export const Post = objectType({
     t.field('commentCount', {
       type: 'Int',
       nullable: false,
-      resolve(root, {}, context) {
-        return context.prisma.post.count({
+      resolve(root, {}, { prisma }) {
+        return prisma.post.count({
           where: { comments: { some: { id: root.id } } },
         })
       },

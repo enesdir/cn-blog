@@ -1,7 +1,7 @@
 import { allow, and, or, rule, shield } from 'graphql-shield'
 
 import { ApolloError } from 'apollo-server-micro'
-import { Context } from '../dbTypes'
+import { Context } from '../context'
 import { IS_DEV } from '../../src/utils/constants'
 import { logger } from '../utils/logger'
 import util from 'util'

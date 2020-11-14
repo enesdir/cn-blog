@@ -20,12 +20,9 @@ export const Comment = objectType({
     t.field('post', {
       type: 'Post',
       nullable: false,
-      resolve: (_parent, _args, ctx) =>
-        ctx.prisma.post
-          .findOne({
-            where: { id: Number(_parent.id) },
-          })
-          .post(),
+      resolve(parent: any) {
+        return parent['post']
+      },
     })
 
     t.field('createdAt', { nullable: false, type: 'DateTime' })

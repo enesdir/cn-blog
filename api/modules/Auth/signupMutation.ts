@@ -1,7 +1,7 @@
 import { extendType, stringArg } from '@nexus/schema'
 import { hashPassword, issueToken } from '../../utils/auth'
 
-import { Context } from '../../dbTypes'
+import { Context } from '../../context'
 import { UserInputError } from 'apollo-server-micro'
 import validator from 'validator'
 

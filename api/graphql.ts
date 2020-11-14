@@ -1,6 +1,6 @@
 import Cors from 'micro-cors'
 import { PageConfig } from 'next'
-import { createServer } from '@api/createServer'
+import { createServer } from './createServer'
 
 const cors = Cors({
   allowMethods: ['POST', 'OPTIONS'],

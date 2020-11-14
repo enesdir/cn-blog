@@ -1,4 +1,4 @@
-import { Context } from '../../dbTypes'
+import { Context } from '../../context'
 import { queryField } from '@nexus/schema'
 
 export const Me = queryField('me', {

@@ -65,7 +65,7 @@ export default function PostCard(props: PostProps) {
   const classes = useStyles()
   const [liked, setLiked] = useState<boolean>(false)
   const toggleLike = () => setLiked(prev => (prev = !prev))
-
+  const color = liked ? 'secondary' : 'action'
   return (
     <Fade in>
       <Card className={classes.card}>
@@ -119,7 +119,7 @@ export default function PostCard(props: PostProps) {
           </Badge>
           <IconButton aria-label="Add to favorites" onClick={toggleLike}>
             <Badge badgeContent={20} color="secondary">
-              <FavoriteIcon color={`${liked ? 'secondary' : 'action'}`} />
+              <FavoriteIcon color={color} />
             </Badge>
           </IconButton>
           <IconButton aria-label="comment">

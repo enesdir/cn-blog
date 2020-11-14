@@ -1,7 +1,7 @@
 import { compare, hash } from 'bcrypt'
 import { mutationField, stringArg } from '@nexus/schema'
 
-import { Context } from '../../dbTypes'
+import { Context } from '../../context'
 import { UserInputError } from 'apollo-server-micro'
 
 export const ChangePassword = mutationField('changePassword', {

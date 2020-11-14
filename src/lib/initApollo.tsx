@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, from } from '@apollo/client'
-import { GRAPHQL_URL, IS_BROWSER, IS_PROD, IS_SERVER } from '@utils/constants'
+import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
+import { GRAPHQL_URL, IS_PROD, IS_SERVER } from '@utils/constants'
 import { IncomingMessage, ServerResponse } from 'http'
 
-import { getToken } from '@utils/tokenHelper'
 import { onError } from '@apollo/client/link/error'
 
 export type ResolverContext = {
@@ -11,19 +10,15 @@ export type ResolverContext = {
   res?: ServerResponse
 }
 
-function createIsomorphLink(ctx: ResolverContext) {
-  const token = getToken(ctx)
+function createIsomorphLink(context: ResolverContext) {
   if (typeof window === 'undefined') {
     const { SchemaLink } = require('@apollo/client/link/schema')
     const { schema } = require('../../api/schema')
-    return new SchemaLink({ schema, context: ctx })
+    return new SchemaLink({ schema, context })
   } else {
     return new HttpLink({
-      uri: GRAPHQL_URL,
+      uri: '/api/graphql',
       credentials: 'same-origin',
-      headers: {
-        authorization: token ? `Bearer ${token}` : '',
-      },
     })
   }
 }
@@ -49,9 +44,8 @@ const errorLink = onError(apolloError => {
   }
 })
 
-export function createApolloClient(context: ResolverContext) {
+export function createApolloClient(context?: ResolverContext) {
   return new ApolloClient({
-    connectToDevTools: IS_BROWSER,
     ssrMode: IS_SERVER,
     link: from([errorLink, createIsomorphLink(context)]),
     cache: new InMemoryCache(),

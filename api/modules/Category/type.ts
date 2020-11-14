@@ -24,8 +24,8 @@ export const Category = objectType({
     t.field('postCount', {
       type: 'Int',
       nullable: false,
-      resolve(root, {}, context) {
-        return context.prisma.post.count({
+      resolve(root, {}, ctx) {
+        return ctx.prisma.post.count({
           where: { categories: { some: { id: root.id } } },
         })
       },

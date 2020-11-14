@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const getPostsQuery = gql`
-  query findManyPost {
+  query posts {
     posts(where: { published: { equals: true } }, orderBy: { createdAt: desc }) {
       id
       title

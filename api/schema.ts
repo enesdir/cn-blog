@@ -3,23 +3,23 @@ import * as AllTypes from './modules'
 import { IS_DEV } from '../src/utils/constants'
 import { applyMiddleware } from 'graphql-middleware'
 import { makeSchema } from '@nexus/schema'
-import { nexusSchemaPrisma } from 'nexus-plugin-prisma/schema'
+import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
 import { permissions } from './permissions'
 
-const getPath = (fileName: string) => path.join(process.cwd(), 'api', 'generated', fileName)
+const getPath = (fileName: string) => path.join(process.cwd(), 'api', fileName)
 
 export const nexusSchema = makeSchema({
   types: AllTypes,
   plugins: [
-    nexusSchemaPrisma({
+    nexusPrisma({
       experimentalCRUD: true,
     }),
   ],
   shouldGenerateArtifacts: IS_DEV,
   outputs: {
-    typegen: getPath('nexus-typegen.ts'),
-    schema: getPath('schema.graphql'),
+    typegen: getPath('generated/nexus-typegen.ts'),
+    schema: getPath('generated/schema.graphql'),
   },
   typegenAutoConfig: {
     contextType: 'Context.Context',
@@ -29,10 +29,14 @@ export const nexusSchema = makeSchema({
         alias: 'prisma',
       },
       {
-        source: require.resolve('./context.ts'),
+        source: getPath('context.ts'),
         alias: 'Context',
       },
     ],
+    backingTypeMap: {
+      Date: 'Date',
+      URL: 'URL',
+    },
   },
 })
 

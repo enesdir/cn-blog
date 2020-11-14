@@ -2,11 +2,7 @@ import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 import React from 'react'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import { cache } from './_app'
-import createEmotionServer from 'create-emotion-server'
 import { themeColor } from '@app/contexts/ThemeContext'
-
-const { extractCritical } = createEmotionServer(cache)
 
 export default class MyDocument extends Document {
   render() {
@@ -66,20 +62,10 @@ MyDocument.getInitialProps = async ctx => {
     })
 
   const initialProps = await Document.getInitialProps(ctx)
-  const styles = extractCritical(initialProps.html)
 
   return {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.
-    styles: [
-      ...React.Children.toArray(initialProps.styles),
-      sheets.getStyleElement(),
-      <style
-        key="emotion-style-tag"
-        data-emotion-css={styles.ids.join(' ')}
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: styles.css }}
-      />,
-    ],
+    styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
   }
 }

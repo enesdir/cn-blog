@@ -9,13 +9,13 @@ export const PostCreateOneMutation = mutationField('createOnePost', {
       nullable: false,
     }),
   },
-  async resolve(_parent, { data }, ctx) {
+  async resolve(_parent, { data }, { prisma, user }) {
     /* userContext is not necessary cuz we are already check in authentication with graphql-shield rules */
-    const userContext = await ctx.user
+    const userContext = await user
     if (!userContext) {
       return Promise.reject('User not authenticated')
     }
-    return ctx.prisma.post.create({
+    return prisma.post.create({
       data: { author: { connect: { id: userContext.id } }, ...data },
     })
   },

@@ -6,7 +6,7 @@ export enum AuthActionsType {
 
 export interface AuthState {
   token: string
-  name?: string
+  name?: string | null
   authed: boolean
 }
 

@@ -2,7 +2,7 @@ import { ApolloError, AuthenticationError } from 'apollo-server-micro'
 import { isPasswordValid, issueToken } from '../../utils/auth'
 import { mutationField, stringArg } from '@nexus/schema'
 
-import { Context } from '../../dbTypes'
+import { Context } from '../../context'
 
 export const Login = mutationField('userLogin', {
   type: 'AuthPayload',

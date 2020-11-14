@@ -9,8 +9,8 @@ export const PostFindOneQuery = queryField('findOnePost', {
       nullable: false,
     }),
   },
-  resolve(_parent, { where }, ctx) {
-    return ctx.prisma.post.findOne({
+  resolve(_parent, { where }, { prisma }) {
+    return prisma.post.findOne({
       where,
     })
   },

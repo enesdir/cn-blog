@@ -4,15 +4,11 @@ import { checkToken, getToken } from '@utils/tokenHelper'
 
 import { ApolloProvider } from '@apollo/client'
 import { AuthProvider } from '@app/contexts/authContext'
-import { CacheProvider } from '@emotion/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import GlobalHead from '@app/components/common/GlobalHead'
 import { ThemeProvider } from '@app/contexts/ThemeContext'
 import { appWithTranslation } from '@app/utils/i18next'
-import createCache from '@emotion/cache'
 import { useApollo } from '@app/lib/withApollo'
-
-export const cache = createCache()
 
 interface PuffyAppProps extends AppProps {
   token: string
@@ -32,17 +28,15 @@ function BlogApp(props: PuffyAppProps) {
   const authed = checkToken(token)
 
   return (
-    <CacheProvider value={cache}>
-      <ThemeProvider>
-        <CssBaseline />
-        <GlobalHead />
-        <ApolloProvider client={apolloClient}>
-          <AuthProvider token={token} authed={authed}>
-            <Component {...pageProps} />
-          </AuthProvider>
-        </ApolloProvider>
-      </ThemeProvider>
-    </CacheProvider>
+    <ThemeProvider>
+      <CssBaseline />
+      <GlobalHead />
+      <ApolloProvider client={apolloClient}>
+        <AuthProvider token={token} authed={authed}>
+          <Component {...pageProps} />
+        </AuthProvider>
+      </ApolloProvider>
+    </ThemeProvider>
   )
 }
 

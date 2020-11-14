@@ -14,7 +14,7 @@ function Createlogger() {
           format.splat(),
           format.json()
         ),
-        defaultMeta: { service: 'xpense-api' },
+        defaultMeta: { service: 'cnblog-api' },
         transports: [
           new transports.Console({
             format: format.combine(format.colorize(), format.simple()),
@@ -28,7 +28,7 @@ function Createlogger() {
       return createLogger({
         level: 'info',
         format: format.prettyPrint(),
-        defaultMeta: { service: 'xpense-api' },
+        defaultMeta: { service: 'cnblog-api' },
         transports: [
           new transports.Console({
             format: format.simple(),

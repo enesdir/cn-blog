@@ -91,7 +91,7 @@ function LoginForm() {
           },
         })
         if (res && res.data.userLogin) {
-          const token = res.data?.userLogin.token ?? console.log('hata')
+          const token = res.data?.userLogin.token ?? null
           signIn(token)
         }
       } catch (error) {

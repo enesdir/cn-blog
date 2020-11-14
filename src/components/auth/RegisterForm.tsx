@@ -80,7 +80,7 @@ function RegisterForm() {
           },
         })
         if (res && res.data.userSignup) {
-          const token = res.data?.userSignup.token ?? console.log('hata')
+          const token = res.data?.userSignup.token ?? null
           signUp(token)
         }
       } catch (error) {
