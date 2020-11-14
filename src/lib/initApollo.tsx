@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
-import { GRAPHQL_URL, IS_PROD, IS_SERVER } from '@utils/constants'
+import { IS_PROD, IS_SERVER } from '@utils/constants'
 import { IncomingMessage, ServerResponse } from 'http'
 
 import { onError } from '@apollo/client/link/error'
