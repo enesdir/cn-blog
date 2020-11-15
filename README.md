@@ -106,13 +106,9 @@ yarn
     cp .env.example .env.local
     ```
 
-  - prisma only check .env file in prisma folder [instructions](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema#using-env-files)
+  - Updated: prisma now check .env file in prisma and root folder [instructions](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema#using-env-files)
 
-    ```shell
-    cp prisma/.env.example prisma/.env
-    ```
-
-    Please add your Postgres Database URL to "prisma/.env" file.
+    Please add your Postgres Database URL to ".env" file.
 
 - Migrate your database following arguments
 

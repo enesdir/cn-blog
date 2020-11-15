@@ -23,7 +23,7 @@
     "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
     "paths": {
       "@app/*": ["src/*"],
-      "@api/*": ["api/*"],
+      "@server/*": ["server/*"],
       "@utils/*": ["src/utils/*"],
       "@graphql/*": ["src/graphql/*"]
     }

@@ -4,8 +4,6 @@ import { PrismaClient } from '@prisma/client'
 import { getCurrentUserByToken } from './utils/auth'
 import { logger } from './utils/logger'
 
-// import prisma from './utils/prisma'
-
 export interface Context {
   prisma: PrismaClient
   user?: Promise<UserDetails | undefined>

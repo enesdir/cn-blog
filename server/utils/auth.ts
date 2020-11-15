@@ -37,7 +37,7 @@ export const getCurrentUserByToken = (token: string | undefined) =>
     }
     try {
       // eslint-disable-next-line prettier/prettier
-      jwt.verify(token, JWT_SECRET, function(err, decoded) {
+      jwt.verify(token, JWT_SECRET, function (err, decoded) {
         if (err) {
           logger.error(err)
           return reject(`Authorization headers not decoded ${err}`)

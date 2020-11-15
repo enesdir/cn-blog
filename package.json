@@ -1,12 +1,13 @@
 {
   "name": "cn-blog",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Fullstack Blog Application with Next.js",
   "homepage": "https://www.github.com/codenuru",
   "author": "enes esen",
   "license": "MIT",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=12.0.0",
+    "yarn": ">=1.22.10"
   },
   "keywords": [
     "React",
@@ -24,11 +25,13 @@
   },
   "scripts": {
     "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "build": "yarn generate && next build",
+    "export": "next export",
+    "deploy": "yarn build && yarn export",
+    "start": "next start -p $PORT",
     "generate": "yarn -s generate:prisma && yarn -s generate:nexus && yarn -s generate:codegen",
     "generate:prisma": "prisma generate",
-    "generate:nexus": "ts-node --transpile-only -P nexus.tsconfig.json api/schema",
+    "generate:nexus": "ts-node --transpile-only -P nexus.tsconfig.json server/schema",
     "generate:codegen": "graphql-codegen --config codegen.yml",
     "migrate:save": "prisma migrate save --experimental",
     "migrate:up": "prisma migrate up --experimental",
