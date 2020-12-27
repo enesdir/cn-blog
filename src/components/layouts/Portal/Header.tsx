@@ -27,8 +27,6 @@ interface HeaderProps {
 }
 function Header(props: HeaderProps) {
   const classes = useStyles()
-  // const user = useUserState()
-  // const { logout } = useAuth()
 
   return (
     <AppBar elevation={1} color="inherit" className={classes.appBar} position="fixed">

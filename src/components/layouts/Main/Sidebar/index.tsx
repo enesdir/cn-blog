@@ -7,7 +7,7 @@ import { IS_BROWSER } from '@app/utils/constants'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItems from './MenuItems'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
-import UserMenu from '@app/components/layouts/shared/ToolbarUser'
+import UserMenu from '@app/components/utils/ToolbarUser'
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme: Theme) =>

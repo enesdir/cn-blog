@@ -7,7 +7,7 @@ import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
 import { permissions } from './permissions'
 
-const getPath = (fileName: string) => path.join(process.cwd(), 'api', fileName)
+const getPath = (fileName: string) => path.join(process.cwd(), 'server', fileName)
 
 export const nexusSchema = makeSchema({
   types: AllTypes,

@@ -10,7 +10,6 @@ import TwitterIcon from '@material-ui/icons/Twitter'
 import { getPostsQuery } from '@graphql/post/getPostsQuery'
 import { makeStyles } from '@material-ui/core/styles'
 import { useQuery } from '@apollo/client'
-import { useTranslation } from '@app/utils/i18next'
 
 const mainFeaturedPost = {
   title: 'Title of a longer featured Area',
@@ -54,7 +53,6 @@ const rightColumnArea = {
 const HomePage = () => {
   const { loading, error, data } = useQuery(getPostsQuery)
   const classes = useStyles()
-  const { t } = useTranslation('common')
   if (loading) {
     return <div>Loading ...</div>
   }
@@ -62,7 +60,7 @@ const HomePage = () => {
     return <div>Error: {error.message}</div>
   }
   return (
-    <MainLayout title={t('title.home')}>
+    <MainLayout title="Welcome My Blog App">
       <FeaturedArea post={mainFeaturedPost} />
       <Grid container spacing={3} className={classes.mainGrid}>
         <PostsArea title="My Blog Posts" posts={data.posts} />

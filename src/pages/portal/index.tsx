@@ -6,7 +6,6 @@ import React from 'react'
 import { getUsersQuery } from '@graphql/user/getUsers'
 import { useAuthState } from '@app/contexts/authContext'
 import { useQuery } from '@apollo/client'
-import { useTranslation } from '@app/utils/i18next'
 
 const User = ({ user }) => (
   <Link href="/p/[id]" as={`/p/${user.id}`}>
@@ -19,7 +18,6 @@ const User = ({ user }) => (
 
 const PortalPage = () => {
   const { loading, error, data } = useQuery(getUsersQuery)
-  const { t } = useTranslation('common')
   const { authed } = useAuthState()
 
   if (loading) {
@@ -30,7 +28,7 @@ const PortalPage = () => {
   }
 
   return (
-    <Layout title={t('title.portal')}>
+    <Layout title="Manage Your Blog">
       <div className="page">
         <h1>My Blog</h1>
         <main>
@@ -56,10 +54,6 @@ const PortalPage = () => {
       </div>
     </Layout>
   )
-}
-
-PortalPage.defaultProps = {
-  i18nNamespaces: ['common'],
 }
 
 export default PortalPage

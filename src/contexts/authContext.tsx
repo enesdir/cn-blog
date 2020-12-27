@@ -2,7 +2,7 @@ import { AuthActionsType, AuthReducerAction, AuthState, reducer } from '@app/red
 import React, { useContext, useEffect, useReducer } from 'react'
 import { checkToken, removeToken, setToken } from '@app/utils/tokenHelper'
 
-import { Router } from '@app/utils/i18next'
+import Router from 'next/router'
 import jwt from 'jwt-decode'
 
 // NOTE:
