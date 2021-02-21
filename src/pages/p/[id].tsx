@@ -1,4 +1,5 @@
 import MainLayout from '@app/components/layouts/Main'
+import Post from '@app/components/Post'
 import React from 'react'
 import { getPostQuery } from '@graphql/post/getPostQuery'
 import { useQuery } from '@apollo/client'
@@ -30,11 +31,7 @@ const PostPage = () => {
   const authorName = data.findOnePost.author ? data.findOnePost.author.name : 'Unknown author'
   return (
     <MainLayout headTitle={title} title="Welcome My Blog Post App">
-      <div>
-        <h2>{title}</h2>
-        <p>By {authorName}</p>
-        <p>{data.findOnePost.content}</p>
-      </div>
+        <Post post={data.findOnePost} key={data.findOnePost.id} />
     </MainLayout>
   )
 }
