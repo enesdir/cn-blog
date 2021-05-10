@@ -1,5 +1,5 @@
-import { compare, hash } from 'bcrypt'
-import { mutationField, stringArg } from '@nexus/schema'
+import { compare, hash } from 'bcryptjs'
+import { mutationField, stringArg, nonNull } from 'nexus'
 
 import { Context } from '../../context'
 import { UserInputError } from 'apollo-server-micro'
@@ -7,12 +7,12 @@ import { UserInputError } from 'apollo-server-micro'
 export const ChangePassword = mutationField('changePassword', {
   type: 'User',
   args: {
-    oldPassword: stringArg({ nullable: false }),
-    newPassword: stringArg({ nullable: false }),
+    oldPassword: nonNull(stringArg()),
+    newPassword: nonNull(stringArg()),
   },
   resolve: async (_, { oldPassword, newPassword }, ctx: Context) => {
     const userContext = await ctx.user
-    const user = await ctx.prisma.user.findOne({ where: { id: Number(userContext.id) } })
+    const user = await ctx.prisma.user.findUnique({ where: { id: Number(userContext.id) } })
 
     if (!user) {
       throw new Error(`User with id "${userContext.id}" doesnt exist.`)

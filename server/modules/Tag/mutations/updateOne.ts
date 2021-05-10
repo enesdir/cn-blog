@@ -1,17 +1,14 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const TagUpdateOneMutation = mutationField('updateOneTag', {
   type: 'Tag',
-  nullable: false,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'TagWhereUniqueInput',
-      nullable: false,
-    }),
-    data: arg({
+    })),
+    data: nonNull(arg({
       type: 'TagUpdateInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { data, where }, ctx) {
     return ctx.prisma.tag.update({

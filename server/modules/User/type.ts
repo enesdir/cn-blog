@@ -1,20 +1,18 @@
-import { objectType } from '@nexus/schema'
+import { objectType } from 'nexus'
 
 export const User = objectType({
   name: 'User',
   description: 'A user registered with the application',
   definition(t) {
-    t.model.id()
-    t.model.name()
-    t.model.surname()
-    t.model.email()
-    t.model.password()
+    t.int('id')
+    t.string('name')
+    t.string('surname')
+    t.string('email')
+    t.nonNull.string('password')
     t.field('role', { type: 'RoleEnum' })
-    t.model.isDeleted()
-    t.field('posts', {
+    t.boolean('isDeleted')
+    t.list.field('posts', {
       type: 'Post',
-      nullable: false,
-      list: [true],
       args: {
         where: 'PostWhereInput',
         orderBy: 'PostOrderByInput',
@@ -24,15 +22,13 @@ export const User = objectType({
       },
       resolve: (parent, _, ctx) =>
         ctx.prisma.user
-          .findOne({
+          .findUnique({
             where: { id: Number(parent.id) },
           })
           .posts(),
     })
-    t.field('comments', {
+    t.list.field('comments', {
       type: 'Comment',
-      nullable: false,
-      list: [true],
       args: {
         where: 'CommentWhereInput',
         orderBy: 'CommentOrderByInput',
@@ -42,12 +38,12 @@ export const User = objectType({
       },
       resolve: (parent, _, ctx) =>
         ctx.prisma.user
-          .findOne({
+          .findUnique({
             where: { id: Number(parent.id) },
           })
           .comments(),
     })
-    t.field('createdAt', { nullable: false, type: 'DateTime' })
+    t.nonNull.field('createdAt', { type: 'DateTime' })
 
     t.field('fullName', {
       type: 'String',

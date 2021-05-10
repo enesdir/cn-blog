@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+type AffectedRowsOutput {
+  count: Int!
+}
+
 type AuthPayload {
   error: String
   token: String
@@ -22,22 +26,28 @@ input BoolFilter {
 }
 
 type Category {
-  id: Int!
-  name: String!
-  postCount: Int!
-  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post!]
-  slug: String!
+  id: Int
+  name: String
+  postCount: Int
+  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post]
+  slug: String
 }
 
 input CategoryCreateInput {
   name: String!
-  posts: PostCreateManyWithoutCategoriesInput
+  posts: PostCreateNestedManyWithoutCategoriesInput
   slug: String!
 }
 
-input CategoryCreateManyWithoutPostsInput {
+input CategoryCreateNestedManyWithoutPostsInput {
   connect: [CategoryWhereUniqueInput!]
+  connectOrCreate: [CategoryCreateOrConnectWithoutPostsInput!]
   create: [CategoryCreateWithoutPostsInput!]
+}
+
+input CategoryCreateOrConnectWithoutPostsInput {
+  create: CategoryCreateWithoutPostsInput!
+  where: CategoryWhereUniqueInput!
 }
 
 input CategoryCreateWithoutPostsInput {
@@ -72,46 +82,42 @@ input CategoryUpdateInput {
   slug: StringFieldUpdateOperationsInput
 }
 
-input CategoryUpdateManyDataInput {
-  name: StringFieldUpdateOperationsInput
-  slug: StringFieldUpdateOperationsInput
-}
-
 input CategoryUpdateManyMutationInput {
   name: StringFieldUpdateOperationsInput
   slug: StringFieldUpdateOperationsInput
 }
 
-input CategoryUpdateManyWithWhereNestedInput {
-  data: CategoryUpdateManyDataInput!
+input CategoryUpdateManyWithWhereWithoutPostsInput {
+  data: CategoryUpdateManyMutationInput!
   where: CategoryScalarWhereInput!
 }
 
 input CategoryUpdateManyWithoutPostsInput {
   connect: [CategoryWhereUniqueInput!]
+  connectOrCreate: [CategoryCreateOrConnectWithoutPostsInput!]
   create: [CategoryCreateWithoutPostsInput!]
   delete: [CategoryWhereUniqueInput!]
   deleteMany: [CategoryScalarWhereInput!]
   disconnect: [CategoryWhereUniqueInput!]
   set: [CategoryWhereUniqueInput!]
   update: [CategoryUpdateWithWhereUniqueWithoutPostsInput!]
-  updateMany: [CategoryUpdateManyWithWhereNestedInput!]
+  updateMany: [CategoryUpdateManyWithWhereWithoutPostsInput!]
   upsert: [CategoryUpsertWithWhereUniqueWithoutPostsInput!]
 }
 
 input CategoryUpdateWithWhereUniqueWithoutPostsInput {
-  data: CategoryUpdateWithoutPostsDataInput!
+  data: CategoryUpdateWithoutPostsInput!
   where: CategoryWhereUniqueInput!
 }
 
-input CategoryUpdateWithoutPostsDataInput {
+input CategoryUpdateWithoutPostsInput {
   name: StringFieldUpdateOperationsInput
   slug: StringFieldUpdateOperationsInput
 }
 
 input CategoryUpsertWithWhereUniqueWithoutPostsInput {
   create: CategoryCreateWithoutPostsInput!
-  update: CategoryUpdateWithoutPostsDataInput!
+  update: CategoryUpdateWithoutPostsInput!
   where: CategoryWhereUniqueInput!
 }
 
@@ -134,41 +140,81 @@ input CategoryWhereUniqueInput {
 type Comment {
   author: User
   authorId: Int
-  contain: String!
-  createdAt: DateTime!
-  id: Int!
-  post: Post!
-  postId: Int
-  updatedAt: DateTime!
-}
-
-input CommentCreateInput {
-  author: UserCreateOneWithoutCommentsInput
-  contain: String!
+  contain: String
   createdAt: DateTime
-  post: PostCreateOneWithoutCommentsInput!
+  id: Int
+  post: Post
+  postId: Int
   updatedAt: DateTime
 }
 
-input CommentCreateManyWithoutAuthorInput {
-  connect: [CommentWhereUniqueInput!]
-  create: [CommentCreateWithoutAuthorInput!]
+input CommentCreateInput {
+  author: UserCreateNestedOneWithoutCommentsInput
+  contain: String!
+  createdAt: DateTime
+  post: PostCreateNestedOneWithoutCommentsInput!
+  updatedAt: DateTime
 }
 
-input CommentCreateManyWithoutPostInput {
+input CommentCreateManyAuthorInput {
+  contain: String!
+  createdAt: DateTime
+  id: Int
+  postId: Int!
+  updatedAt: DateTime
+}
+
+input CommentCreateManyAuthorInputEnvelope {
+  data: [CommentCreateManyAuthorInput!]
+  skipDuplicates: Boolean
+}
+
+input CommentCreateManyPostInput {
+  authorId: Int
+  contain: String!
+  createdAt: DateTime
+  id: Int
+  updatedAt: DateTime
+}
+
+input CommentCreateManyPostInputEnvelope {
+  data: [CommentCreateManyPostInput!]
+  skipDuplicates: Boolean
+}
+
+input CommentCreateNestedManyWithoutAuthorInput {
   connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutAuthorInput!]
+  create: [CommentCreateWithoutAuthorInput!]
+  createMany: CommentCreateManyAuthorInputEnvelope
+}
+
+input CommentCreateNestedManyWithoutPostInput {
+  connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutPostInput!]
   create: [CommentCreateWithoutPostInput!]
+  createMany: CommentCreateManyPostInputEnvelope
+}
+
+input CommentCreateOrConnectWithoutAuthorInput {
+  create: CommentCreateWithoutAuthorInput!
+  where: CommentWhereUniqueInput!
+}
+
+input CommentCreateOrConnectWithoutPostInput {
+  create: CommentCreateWithoutPostInput!
+  where: CommentWhereUniqueInput!
 }
 
 input CommentCreateWithoutAuthorInput {
   contain: String!
   createdAt: DateTime
-  post: PostCreateOneWithoutCommentsInput!
+  post: PostCreateNestedOneWithoutCommentsInput!
   updatedAt: DateTime
 }
 
 input CommentCreateWithoutPostInput {
-  author: UserCreateOneWithoutCommentsInput
+  author: UserCreateNestedOneWithoutCommentsInput
   contain: String!
   createdAt: DateTime
   updatedAt: DateTime
@@ -209,65 +255,68 @@ input CommentUpdateInput {
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input CommentUpdateManyDataInput {
-  contain: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
 input CommentUpdateManyMutationInput {
   contain: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input CommentUpdateManyWithWhereNestedInput {
-  data: CommentUpdateManyDataInput!
+input CommentUpdateManyWithWhereWithoutAuthorInput {
+  data: CommentUpdateManyMutationInput!
+  where: CommentScalarWhereInput!
+}
+
+input CommentUpdateManyWithWhereWithoutPostInput {
+  data: CommentUpdateManyMutationInput!
   where: CommentScalarWhereInput!
 }
 
 input CommentUpdateManyWithoutAuthorInput {
   connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutAuthorInput!]
   create: [CommentCreateWithoutAuthorInput!]
+  createMany: CommentCreateManyAuthorInputEnvelope
   delete: [CommentWhereUniqueInput!]
   deleteMany: [CommentScalarWhereInput!]
   disconnect: [CommentWhereUniqueInput!]
   set: [CommentWhereUniqueInput!]
   update: [CommentUpdateWithWhereUniqueWithoutAuthorInput!]
-  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+  updateMany: [CommentUpdateManyWithWhereWithoutAuthorInput!]
   upsert: [CommentUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
 input CommentUpdateManyWithoutPostInput {
   connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutPostInput!]
   create: [CommentCreateWithoutPostInput!]
+  createMany: CommentCreateManyPostInputEnvelope
   delete: [CommentWhereUniqueInput!]
   deleteMany: [CommentScalarWhereInput!]
   disconnect: [CommentWhereUniqueInput!]
   set: [CommentWhereUniqueInput!]
   update: [CommentUpdateWithWhereUniqueWithoutPostInput!]
-  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+  updateMany: [CommentUpdateManyWithWhereWithoutPostInput!]
   upsert: [CommentUpsertWithWhereUniqueWithoutPostInput!]
 }
 
 input CommentUpdateWithWhereUniqueWithoutAuthorInput {
-  data: CommentUpdateWithoutAuthorDataInput!
+  data: CommentUpdateWithoutAuthorInput!
   where: CommentWhereUniqueInput!
 }
 
 input CommentUpdateWithWhereUniqueWithoutPostInput {
-  data: CommentUpdateWithoutPostDataInput!
+  data: CommentUpdateWithoutPostInput!
   where: CommentWhereUniqueInput!
 }
 
-input CommentUpdateWithoutAuthorDataInput {
+input CommentUpdateWithoutAuthorInput {
   contain: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   post: PostUpdateOneRequiredWithoutCommentsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input CommentUpdateWithoutPostDataInput {
+input CommentUpdateWithoutPostInput {
   author: UserUpdateOneWithoutCommentsInput
   contain: StringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -276,13 +325,13 @@ input CommentUpdateWithoutPostDataInput {
 
 input CommentUpsertWithWhereUniqueWithoutAuthorInput {
   create: CommentCreateWithoutAuthorInput!
-  update: CommentUpdateWithoutAuthorDataInput!
+  update: CommentUpdateWithoutAuthorInput!
   where: CommentWhereUniqueInput!
 }
 
 input CommentUpsertWithWhereUniqueWithoutPostInput {
   create: CommentCreateWithoutPostInput!
-  update: CommentUpdateWithoutPostDataInput!
+  update: CommentUpdateWithoutPostInput!
   where: CommentWhereUniqueInput!
 }
 
@@ -305,10 +354,8 @@ input CommentWhereUniqueInput {
 }
 
 """
-A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
-scalar Date
-
 scalar DateTime
 
 input DateTimeFieldUpdateOperationsInput {
@@ -369,15 +416,15 @@ input IntNullableFilter {
 
 type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User
-  createOneCategory(data: CategoryCreateInput!): Category!
-  createOneComment(data: CommentCreateInput!): Comment!
-  createOnePost(data: PostCreateInput!): Post!
-  createOneTag(data: TagCreateInput!): Tag!
-  createOneUser(data: UserCreateInput!): User!
+  createOneCategory(data: CategoryCreateInput!): Category
+  createOneComment(data: CommentCreateInput!): Comment
+  createOnePost(data: PostCreateInput!): Post
+  createOneTag(data: TagCreateInput!): Tag
+  createOneUser(data: UserCreateInput!): User
   deleteManyCategory(where: CategoryWhereInput): BatchPayload
-  deleteManyComment(where: CommentWhereInput): BatchPayload
+  deleteManyComment(where: CommentWhereInput!): BatchPayload
   deleteManyPost(where: PostWhereInput): BatchPayload
-  deleteManyTag(where: TagWhereInput): BatchPayload
+  deleteManyTag(where: TagWhereInput!): BatchPayload
   deleteManyUser(where: UserWhereInput): BatchPayload
   deleteOneCategory(where: CategoryWhereUniqueInput!): Category
   deleteOneComment(where: CommentWhereUniqueInput!): Comment
@@ -389,16 +436,16 @@ type Mutation {
   updateManyPost(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload
   updateManyTag(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload
   updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload
-  updateOneCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category!
-  updateOneComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment!
-  updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post!
-  updateOneTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag!
-  updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
-  upsertOneCategory(create: CategoryCreateInput!, update: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category!
-  upsertOneComment(create: CommentCreateInput!, update: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment!
-  upsertOnePost(create: PostCreateInput!, update: PostUpdateInput!, where: PostWhereUniqueInput!): Post!
-  upsertOneTag(create: TagCreateInput!, update: TagUpdateInput!, where: TagWhereUniqueInput!): Tag!
-  upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+  updateOneCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateOneComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateOneTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  upsertOneCategory(create: CategoryCreateInput!, update: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  upsertOneComment(create: CommentCreateInput!, update: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  upsertOnePost(create: PostCreateInput!, update: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  upsertOneTag(create: TagCreateInput!, update: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User
 
   """Login mutation: Send your email and password then get back a token"""
   userLogin(
@@ -493,99 +540,140 @@ input NullableStringFieldUpdateOperationsInput {
 }
 
 type Post {
-  author: User!
-  authorId: Int!
+  author: User
+  authorId: Int
   categories(where: CategoryWhereInput): [Category]
-  commentCount: Int!
+  commentCount: Int
   comments(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment]
   content: String
   createdAt: DateTime!
-  id: Int!
+  id: Int
   likeCount: Int
-  published: Boolean!
+  published: Boolean
   tags(where: TagWhereInput): [Tag]
   title: String
-  updatedAt: DateTime!
+  updatedAt: DateTime
   viewCount: Int
 }
 
 input PostCreateInput {
-  author: UserCreateOneWithoutPostsInput
-  categories: CategoryCreateManyWithoutPostsInput
-  comments: CommentCreateManyWithoutPostInput
+  author: UserCreateNestedOneWithoutPostsInput
+  categories: CategoryCreateNestedManyWithoutPostsInput
+  comments: CommentCreateNestedManyWithoutPostInput
   content: String
   createdAt: DateTime
   likeCount: Int
   published: Boolean
-  tags: TagCreateManyWithoutPostsInput
+  tags: TagCreateNestedManyWithoutPostsInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
 }
 
-input PostCreateManyWithoutAuthorInput {
-  connect: [PostWhereUniqueInput!]
-  create: [PostCreateWithoutAuthorInput!]
+input PostCreateManyAuthorInput {
+  content: String
+  createdAt: DateTime
+  id: Int
+  likeCount: Int
+  published: Boolean
+  title: String!
+  updatedAt: DateTime
+  viewCount: Int
 }
 
-input PostCreateManyWithoutCategoriesInput {
+input PostCreateManyAuthorInputEnvelope {
+  data: [PostCreateManyAuthorInput!]
+  skipDuplicates: Boolean
+}
+
+input PostCreateNestedManyWithoutAuthorInput {
   connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutAuthorInput!]
+  create: [PostCreateWithoutAuthorInput!]
+  createMany: PostCreateManyAuthorInputEnvelope
+}
+
+input PostCreateNestedManyWithoutCategoriesInput {
+  connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutCategoriesInput!]
   create: [PostCreateWithoutCategoriesInput!]
 }
 
-input PostCreateManyWithoutTagsInput {
+input PostCreateNestedManyWithoutTagsInput {
   connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutTagsInput!]
   create: [PostCreateWithoutTagsInput!]
 }
 
-input PostCreateOneWithoutCommentsInput {
+input PostCreateNestedOneWithoutCommentsInput {
   connect: PostWhereUniqueInput
+  connectOrCreate: PostCreateOrConnectWithoutCommentsInput
   create: PostCreateWithoutCommentsInput
 }
 
+input PostCreateOrConnectWithoutAuthorInput {
+  create: PostCreateWithoutAuthorInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateOrConnectWithoutCategoriesInput {
+  create: PostCreateWithoutCategoriesInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateOrConnectWithoutCommentsInput {
+  create: PostCreateWithoutCommentsInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateOrConnectWithoutTagsInput {
+  create: PostCreateWithoutTagsInput!
+  where: PostWhereUniqueInput!
+}
+
 input PostCreateWithoutAuthorInput {
-  categories: CategoryCreateManyWithoutPostsInput
-  comments: CommentCreateManyWithoutPostInput
+  categories: CategoryCreateNestedManyWithoutPostsInput
+  comments: CommentCreateNestedManyWithoutPostInput
   content: String
   createdAt: DateTime
   likeCount: Int
   published: Boolean
-  tags: TagCreateManyWithoutPostsInput
+  tags: TagCreateNestedManyWithoutPostsInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
 }
 
 input PostCreateWithoutCategoriesInput {
-  author: UserCreateOneWithoutPostsInput
-  comments: CommentCreateManyWithoutPostInput
+  author: UserCreateNestedOneWithoutPostsInput
+  comments: CommentCreateNestedManyWithoutPostInput
   content: String
   createdAt: DateTime
   likeCount: Int
   published: Boolean
-  tags: TagCreateManyWithoutPostsInput
+  tags: TagCreateNestedManyWithoutPostsInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
 }
 
 input PostCreateWithoutCommentsInput {
-  author: UserCreateOneWithoutPostsInput
-  categories: CategoryCreateManyWithoutPostsInput
+  author: UserCreateNestedOneWithoutPostsInput
+  categories: CategoryCreateNestedManyWithoutPostsInput
   content: String
   createdAt: DateTime
   likeCount: Int
   published: Boolean
-  tags: TagCreateManyWithoutPostsInput
+  tags: TagCreateNestedManyWithoutPostsInput
   title: String!
   updatedAt: DateTime
   viewCount: Int
 }
 
 input PostCreateWithoutTagsInput {
-  author: UserCreateOneWithoutPostsInput
-  categories: CategoryCreateManyWithoutPostsInput
-  comments: CommentCreateManyWithoutPostInput
+  author: UserCreateNestedOneWithoutPostsInput
+  categories: CategoryCreateNestedManyWithoutPostsInput
+  comments: CommentCreateNestedManyWithoutPostInput
   content: String
   createdAt: DateTime
   likeCount: Int
@@ -642,16 +730,6 @@ input PostUpdateInput {
   viewCount: IntFieldUpdateOperationsInput
 }
 
-input PostUpdateManyDataInput {
-  content: NullableStringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  likeCount: IntFieldUpdateOperationsInput
-  published: BoolFieldUpdateOperationsInput
-  title: StringFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  viewCount: IntFieldUpdateOperationsInput
-}
-
 input PostUpdateManyMutationInput {
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -662,70 +740,85 @@ input PostUpdateManyMutationInput {
   viewCount: IntFieldUpdateOperationsInput
 }
 
-input PostUpdateManyWithWhereNestedInput {
-  data: PostUpdateManyDataInput!
+input PostUpdateManyWithWhereWithoutAuthorInput {
+  data: PostUpdateManyMutationInput!
+  where: PostScalarWhereInput!
+}
+
+input PostUpdateManyWithWhereWithoutCategoriesInput {
+  data: PostUpdateManyMutationInput!
+  where: PostScalarWhereInput!
+}
+
+input PostUpdateManyWithWhereWithoutTagsInput {
+  data: PostUpdateManyMutationInput!
   where: PostScalarWhereInput!
 }
 
 input PostUpdateManyWithoutAuthorInput {
   connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutAuthorInput!]
   create: [PostCreateWithoutAuthorInput!]
+  createMany: PostCreateManyAuthorInputEnvelope
   delete: [PostWhereUniqueInput!]
   deleteMany: [PostScalarWhereInput!]
   disconnect: [PostWhereUniqueInput!]
   set: [PostWhereUniqueInput!]
   update: [PostUpdateWithWhereUniqueWithoutAuthorInput!]
-  updateMany: [PostUpdateManyWithWhereNestedInput!]
+  updateMany: [PostUpdateManyWithWhereWithoutAuthorInput!]
   upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
 input PostUpdateManyWithoutCategoriesInput {
   connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutCategoriesInput!]
   create: [PostCreateWithoutCategoriesInput!]
   delete: [PostWhereUniqueInput!]
   deleteMany: [PostScalarWhereInput!]
   disconnect: [PostWhereUniqueInput!]
   set: [PostWhereUniqueInput!]
   update: [PostUpdateWithWhereUniqueWithoutCategoriesInput!]
-  updateMany: [PostUpdateManyWithWhereNestedInput!]
+  updateMany: [PostUpdateManyWithWhereWithoutCategoriesInput!]
   upsert: [PostUpsertWithWhereUniqueWithoutCategoriesInput!]
 }
 
 input PostUpdateManyWithoutTagsInput {
   connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutTagsInput!]
   create: [PostCreateWithoutTagsInput!]
   delete: [PostWhereUniqueInput!]
   deleteMany: [PostScalarWhereInput!]
   disconnect: [PostWhereUniqueInput!]
   set: [PostWhereUniqueInput!]
   update: [PostUpdateWithWhereUniqueWithoutTagsInput!]
-  updateMany: [PostUpdateManyWithWhereNestedInput!]
+  updateMany: [PostUpdateManyWithWhereWithoutTagsInput!]
   upsert: [PostUpsertWithWhereUniqueWithoutTagsInput!]
 }
 
 input PostUpdateOneRequiredWithoutCommentsInput {
   connect: PostWhereUniqueInput
+  connectOrCreate: PostCreateOrConnectWithoutCommentsInput
   create: PostCreateWithoutCommentsInput
-  update: PostUpdateWithoutCommentsDataInput
+  update: PostUpdateWithoutCommentsInput
   upsert: PostUpsertWithoutCommentsInput
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
-  data: PostUpdateWithoutAuthorDataInput!
+  data: PostUpdateWithoutAuthorInput!
   where: PostWhereUniqueInput!
 }
 
 input PostUpdateWithWhereUniqueWithoutCategoriesInput {
-  data: PostUpdateWithoutCategoriesDataInput!
+  data: PostUpdateWithoutCategoriesInput!
   where: PostWhereUniqueInput!
 }
 
 input PostUpdateWithWhereUniqueWithoutTagsInput {
-  data: PostUpdateWithoutTagsDataInput!
+  data: PostUpdateWithoutTagsInput!
   where: PostWhereUniqueInput!
 }
 
-input PostUpdateWithoutAuthorDataInput {
+input PostUpdateWithoutAuthorInput {
   categories: CategoryUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
   content: NullableStringFieldUpdateOperationsInput
@@ -738,7 +831,7 @@ input PostUpdateWithoutAuthorDataInput {
   viewCount: IntFieldUpdateOperationsInput
 }
 
-input PostUpdateWithoutCategoriesDataInput {
+input PostUpdateWithoutCategoriesInput {
   author: UserUpdateOneWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
   content: NullableStringFieldUpdateOperationsInput
@@ -751,7 +844,7 @@ input PostUpdateWithoutCategoriesDataInput {
   viewCount: IntFieldUpdateOperationsInput
 }
 
-input PostUpdateWithoutCommentsDataInput {
+input PostUpdateWithoutCommentsInput {
   author: UserUpdateOneWithoutPostsInput
   categories: CategoryUpdateManyWithoutPostsInput
   content: NullableStringFieldUpdateOperationsInput
@@ -764,7 +857,7 @@ input PostUpdateWithoutCommentsDataInput {
   viewCount: IntFieldUpdateOperationsInput
 }
 
-input PostUpdateWithoutTagsDataInput {
+input PostUpdateWithoutTagsInput {
   author: UserUpdateOneWithoutPostsInput
   categories: CategoryUpdateManyWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
@@ -779,25 +872,25 @@ input PostUpdateWithoutTagsDataInput {
 
 input PostUpsertWithWhereUniqueWithoutAuthorInput {
   create: PostCreateWithoutAuthorInput!
-  update: PostUpdateWithoutAuthorDataInput!
+  update: PostUpdateWithoutAuthorInput!
   where: PostWhereUniqueInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutCategoriesInput {
   create: PostCreateWithoutCategoriesInput!
-  update: PostUpdateWithoutCategoriesDataInput!
+  update: PostUpdateWithoutCategoriesInput!
   where: PostWhereUniqueInput!
 }
 
 input PostUpsertWithWhereUniqueWithoutTagsInput {
   create: PostCreateWithoutTagsInput!
-  update: PostUpdateWithoutTagsDataInput!
+  update: PostUpdateWithoutTagsInput!
   where: PostWhereUniqueInput!
 }
 
 input PostUpsertWithoutCommentsInput {
   create: PostCreateWithoutCommentsInput!
-  update: PostUpdateWithoutCommentsDataInput!
+  update: PostUpdateWithoutCommentsInput!
 }
 
 input PostWhereInput {
@@ -905,22 +998,28 @@ input StringNullableFilter {
 }
 
 type Tag {
-  id: Int!
-  name: String!
-  postCount: Int!
-  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post!]!
-  slug: String!
+  id: Int
+  name: String
+  postCount: Int
+  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post]
+  slug: String
 }
 
 input TagCreateInput {
   name: String!
-  posts: PostCreateManyWithoutTagsInput
+  posts: PostCreateNestedManyWithoutTagsInput
   slug: String!
 }
 
-input TagCreateManyWithoutPostsInput {
+input TagCreateNestedManyWithoutPostsInput {
   connect: [TagWhereUniqueInput!]
+  connectOrCreate: [TagCreateOrConnectWithoutPostsInput!]
   create: [TagCreateWithoutPostsInput!]
+}
+
+input TagCreateOrConnectWithoutPostsInput {
+  create: TagCreateWithoutPostsInput!
+  where: TagWhereUniqueInput!
 }
 
 input TagCreateWithoutPostsInput {
@@ -955,46 +1054,42 @@ input TagUpdateInput {
   slug: StringFieldUpdateOperationsInput
 }
 
-input TagUpdateManyDataInput {
-  name: StringFieldUpdateOperationsInput
-  slug: StringFieldUpdateOperationsInput
-}
-
 input TagUpdateManyMutationInput {
   name: StringFieldUpdateOperationsInput
   slug: StringFieldUpdateOperationsInput
 }
 
-input TagUpdateManyWithWhereNestedInput {
-  data: TagUpdateManyDataInput!
+input TagUpdateManyWithWhereWithoutPostsInput {
+  data: TagUpdateManyMutationInput!
   where: TagScalarWhereInput!
 }
 
 input TagUpdateManyWithoutPostsInput {
   connect: [TagWhereUniqueInput!]
+  connectOrCreate: [TagCreateOrConnectWithoutPostsInput!]
   create: [TagCreateWithoutPostsInput!]
   delete: [TagWhereUniqueInput!]
   deleteMany: [TagScalarWhereInput!]
   disconnect: [TagWhereUniqueInput!]
   set: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutPostsInput!]
-  updateMany: [TagUpdateManyWithWhereNestedInput!]
+  updateMany: [TagUpdateManyWithWhereWithoutPostsInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutPostsInput!]
 }
 
 input TagUpdateWithWhereUniqueWithoutPostsInput {
-  data: TagUpdateWithoutPostsDataInput!
+  data: TagUpdateWithoutPostsInput!
   where: TagWhereUniqueInput!
 }
 
-input TagUpdateWithoutPostsDataInput {
+input TagUpdateWithoutPostsInput {
   name: StringFieldUpdateOperationsInput
   slug: StringFieldUpdateOperationsInput
 }
 
 input TagUpsertWithWhereUniqueWithoutPostsInput {
   create: TagCreateWithoutPostsInput!
-  update: TagUpdateWithoutPostsDataInput!
+  update: TagUpdateWithoutPostsInput!
   where: TagWhereUniqueInput!
 }
 
@@ -1021,39 +1116,51 @@ scalar URL
 
 """A user registered with the application"""
 type User {
-  comments(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment!]!
+  comments(cursor: CommentWhereUniqueInput, orderBy: CommentOrderByInput, skip: Int, take: Int, where: CommentWhereInput): [Comment]
   createdAt: DateTime!
-  email: String!
+  email: String
   fullName: String
-  id: Int!
-  isDeleted: Boolean!
-  name: String!
+  id: Int
+  isDeleted: Boolean
+  name: String
   password: String!
-  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post!]!
+  posts(cursor: PostWhereUniqueInput, orderBy: PostOrderByInput, skip: Int, take: Int, where: PostWhereInput): [Post]
   role: RoleEnum
-  surname: String!
+  surname: String
 }
 
 input UserCreateInput {
-  comments: CommentCreateManyWithoutAuthorInput
+  comments: CommentCreateNestedManyWithoutAuthorInput
   createdAt: DateTime
   email: String!
   isDeleted: Boolean
   name: String!
   password: String!
-  posts: PostCreateManyWithoutAuthorInput
+  posts: PostCreateNestedManyWithoutAuthorInput
   role: Role
   surname: String!
 }
 
-input UserCreateOneWithoutCommentsInput {
+input UserCreateNestedOneWithoutCommentsInput {
   connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutCommentsInput
   create: UserCreateWithoutCommentsInput
 }
 
-input UserCreateOneWithoutPostsInput {
+input UserCreateNestedOneWithoutPostsInput {
   connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPostsInput
   create: UserCreateWithoutPostsInput
+}
+
+input UserCreateOrConnectWithoutCommentsInput {
+  create: UserCreateWithoutCommentsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateOrConnectWithoutPostsInput {
+  create: UserCreateWithoutPostsInput!
+  where: UserWhereUniqueInput!
 }
 
 input UserCreateWithoutCommentsInput {
@@ -1062,13 +1169,13 @@ input UserCreateWithoutCommentsInput {
   isDeleted: Boolean
   name: String!
   password: String!
-  posts: PostCreateManyWithoutAuthorInput
+  posts: PostCreateNestedManyWithoutAuthorInput
   role: Role
   surname: String!
 }
 
 input UserCreateWithoutPostsInput {
-  comments: CommentCreateManyWithoutAuthorInput
+  comments: CommentCreateNestedManyWithoutAuthorInput
   createdAt: DateTime
   email: String!
   isDeleted: Boolean
@@ -1113,23 +1220,25 @@ input UserUpdateManyMutationInput {
 
 input UserUpdateOneWithoutCommentsInput {
   connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutCommentsInput
   create: UserCreateWithoutCommentsInput
   delete: Boolean
   disconnect: Boolean
-  update: UserUpdateWithoutCommentsDataInput
+  update: UserUpdateWithoutCommentsInput
   upsert: UserUpsertWithoutCommentsInput
 }
 
 input UserUpdateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPostsInput
   create: UserCreateWithoutPostsInput
   delete: Boolean
   disconnect: Boolean
-  update: UserUpdateWithoutPostsDataInput
+  update: UserUpdateWithoutPostsInput
   upsert: UserUpsertWithoutPostsInput
 }
 
-input UserUpdateWithoutCommentsDataInput {
+input UserUpdateWithoutCommentsInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   isDeleted: BoolFieldUpdateOperationsInput
@@ -1140,7 +1249,7 @@ input UserUpdateWithoutCommentsDataInput {
   surname: StringFieldUpdateOperationsInput
 }
 
-input UserUpdateWithoutPostsDataInput {
+input UserUpdateWithoutPostsInput {
   comments: CommentUpdateManyWithoutAuthorInput
   createdAt: DateTimeFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
@@ -1153,12 +1262,12 @@ input UserUpdateWithoutPostsDataInput {
 
 input UserUpsertWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput!
-  update: UserUpdateWithoutCommentsDataInput!
+  update: UserUpdateWithoutCommentsInput!
 }
 
 input UserUpsertWithoutPostsInput {
   create: UserCreateWithoutPostsInput!
-  update: UserUpdateWithoutPostsDataInput!
+  update: UserUpdateWithoutPostsInput!
 }
 
 input UserWhereInput {

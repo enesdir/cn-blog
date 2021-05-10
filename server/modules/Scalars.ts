@@ -1,13 +1,5 @@
-import { GraphQLDate, GraphQLURL } from 'graphql-scalars'
+import { DateTimeResolver, URLResolver } from 'graphql-scalars'
+import { asNexusMethod } from 'nexus'
 
-import { decorateType } from '@nexus/schema'
-
-export const GQLDate = decorateType(GraphQLDate, {
-  rootTyping: 'Date',
-  asNexusMethod: 'date',
-})
-
-export const GQLURL = decorateType(GraphQLURL, {
-  rootTyping: 'URL',
-  asNexusMethod: 'url',
-})
+export const GQLDate = asNexusMethod(DateTimeResolver, 'date')
+export const GQLURL = asNexusMethod(URLResolver, 'url')

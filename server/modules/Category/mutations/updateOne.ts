@@ -1,17 +1,14 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const CategoryUpdateOneMutation = mutationField('updateOneCategory', {
   type: 'Category',
-  nullable: false,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'CategoryWhereUniqueInput',
-      nullable: false,
-    }),
-    data: arg({
+    })),
+    data: nonNull(arg({
       type: 'CategoryUpdateInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { data, where }, ctx) {
     return ctx.prisma.category.update({

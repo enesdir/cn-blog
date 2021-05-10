@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 
-import { compareSync, genSaltSync, hashSync } from 'bcrypt'
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
 
 import { UserDetails } from '../dbTypes'
 import { logger } from './logger'

@@ -1,9 +1,7 @@
-import { queryField } from '@nexus/schema'
+import { list, queryField } from 'nexus'
 
 export const PostFindManyQuery = queryField('findManyPost', {
-  type: 'Post',
-  nullable: true,
-  list: true,
+  type: list('Post'),
   args: {
     where: 'PostWhereInput',
     orderBy: 'PostOrderByInput',

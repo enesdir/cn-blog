@@ -9,11 +9,15 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
-  Date: any;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
   /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
   URL: any;
+};
+
+export type AffectedRowsOutput = {
+  __typename?: 'AffectedRowsOutput';
+  count: Scalars['Int'];
 };
 
 export type AuthPayload = {
@@ -39,11 +43,11 @@ export type BoolFilter = {
 
 export type Category = {
   __typename?: 'Category';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  postCount: Scalars['Int'];
-  posts?: Maybe<Array<Post>>;
-  slug: Scalars['String'];
+  id?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  postCount?: Maybe<Scalars['Int']>;
+  posts?: Maybe<Array<Maybe<Post>>>;
+  slug?: Maybe<Scalars['String']>;
 };
 
 
@@ -57,17 +61,17 @@ export type CategoryPostsArgs = {
 
 export type CategoryCreateInput = {
   name: Scalars['String'];
-  posts?: Maybe<PostCreateManyWithoutCategoriesInput>;
+  posts?: Maybe<PostCreateNestedManyWithoutCategoriesInput>;
   slug: Scalars['String'];
 };
 
-export type CategoryCreateManyWithoutPostsInput = {
+export type CategoryCreateNestedManyWithoutPostsInput = {
   connect?: Maybe<Array<CategoryWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CategoryCreateOrConnectWithoutpostsInput>>;
+  connectOrCreate?: Maybe<Array<CategoryCreateOrConnectWithoutPostsInput>>;
   create?: Maybe<Array<CategoryCreateWithoutPostsInput>>;
 };
 
-export type CategoryCreateOrConnectWithoutpostsInput = {
+export type CategoryCreateOrConnectWithoutPostsInput = {
   create: CategoryCreateWithoutPostsInput;
   where: CategoryWhereUniqueInput;
 };
@@ -91,10 +95,10 @@ export type CategoryOrderByInput = {
 
 export type CategoryScalarWhereInput = {
   AND?: Maybe<Array<CategoryScalarWhereInput>>;
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
   NOT?: Maybe<Array<CategoryScalarWhereInput>>;
   OR?: Maybe<Array<CategoryScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  name?: Maybe<StringFilter>;
   slug?: Maybe<StringFilter>;
 };
 
@@ -109,9 +113,14 @@ export type CategoryUpdateManyMutationInput = {
   slug?: Maybe<StringFieldUpdateOperationsInput>;
 };
 
+export type CategoryUpdateManyWithWhereWithoutPostsInput = {
+  data: CategoryUpdateManyMutationInput;
+  where: CategoryScalarWhereInput;
+};
+
 export type CategoryUpdateManyWithoutPostsInput = {
   connect?: Maybe<Array<CategoryWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CategoryCreateOrConnectWithoutpostsInput>>;
+  connectOrCreate?: Maybe<Array<CategoryCreateOrConnectWithoutPostsInput>>;
   create?: Maybe<Array<CategoryCreateWithoutPostsInput>>;
   delete?: Maybe<Array<CategoryWhereUniqueInput>>;
   deleteMany?: Maybe<Array<CategoryScalarWhereInput>>;
@@ -122,19 +131,14 @@ export type CategoryUpdateManyWithoutPostsInput = {
   upsert?: Maybe<Array<CategoryUpsertWithWhereUniqueWithoutPostsInput>>;
 };
 
-export type CategoryUpdateManyWithWhereWithoutPostsInput = {
-  data: CategoryUpdateManyMutationInput;
-  where: CategoryScalarWhereInput;
+export type CategoryUpdateWithWhereUniqueWithoutPostsInput = {
+  data: CategoryUpdateWithoutPostsInput;
+  where: CategoryWhereUniqueInput;
 };
 
 export type CategoryUpdateWithoutPostsInput = {
   name?: Maybe<StringFieldUpdateOperationsInput>;
   slug?: Maybe<StringFieldUpdateOperationsInput>;
-};
-
-export type CategoryUpdateWithWhereUniqueWithoutPostsInput = {
-  data: CategoryUpdateWithoutPostsInput;
-  where: CategoryWhereUniqueInput;
 };
 
 export type CategoryUpsertWithWhereUniqueWithoutPostsInput = {
@@ -145,10 +149,10 @@ export type CategoryUpsertWithWhereUniqueWithoutPostsInput = {
 
 export type CategoryWhereInput = {
   AND?: Maybe<Array<CategoryWhereInput>>;
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
   NOT?: Maybe<Array<CategoryWhereInput>>;
   OR?: Maybe<Array<CategoryWhereInput>>;
+  id?: Maybe<IntFilter>;
+  name?: Maybe<StringFilter>;
   posts?: Maybe<PostListRelationFilter>;
   slug?: Maybe<StringFilter>;
 };
@@ -163,40 +167,68 @@ export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<User>;
   authorId?: Maybe<Scalars['Int']>;
-  contain: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['Int'];
-  post: Post;
-  postId?: Maybe<Scalars['Int']>;
-  updatedAt: Scalars['DateTime'];
-};
-
-export type CommentCreateInput = {
-  author?: Maybe<UserCreateOneWithoutCommentsInput>;
-  contain: Scalars['String'];
+  contain?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
-  post: PostCreateOneWithoutCommentsInput;
+  id?: Maybe<Scalars['Int']>;
+  post?: Maybe<Post>;
+  postId?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type CommentCreateManyWithoutAuthorInput = {
+export type CommentCreateInput = {
+  author?: Maybe<UserCreateNestedOneWithoutCommentsInput>;
+  contain: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  post: PostCreateNestedOneWithoutCommentsInput;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CommentCreateManyAuthorInput = {
+  contain: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['Int']>;
+  postId: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CommentCreateManyAuthorInputEnvelope = {
+  data?: Maybe<Array<CommentCreateManyAuthorInput>>;
+  skipDuplicates?: Maybe<Scalars['Boolean']>;
+};
+
+export type CommentCreateManyPostInput = {
+  authorId?: Maybe<Scalars['Int']>;
+  contain: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CommentCreateManyPostInputEnvelope = {
+  data?: Maybe<Array<CommentCreateManyPostInput>>;
+  skipDuplicates?: Maybe<Scalars['Boolean']>;
+};
+
+export type CommentCreateNestedManyWithoutAuthorInput = {
   connect?: Maybe<Array<CommentWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutauthorInput>>;
+  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutAuthorInput>>;
   create?: Maybe<Array<CommentCreateWithoutAuthorInput>>;
+  createMany?: Maybe<CommentCreateManyAuthorInputEnvelope>;
 };
 
-export type CommentCreateManyWithoutPostInput = {
+export type CommentCreateNestedManyWithoutPostInput = {
   connect?: Maybe<Array<CommentWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutpostInput>>;
+  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutPostInput>>;
   create?: Maybe<Array<CommentCreateWithoutPostInput>>;
+  createMany?: Maybe<CommentCreateManyPostInputEnvelope>;
 };
 
-export type CommentCreateOrConnectWithoutauthorInput = {
+export type CommentCreateOrConnectWithoutAuthorInput = {
   create: CommentCreateWithoutAuthorInput;
   where: CommentWhereUniqueInput;
 };
 
-export type CommentCreateOrConnectWithoutpostInput = {
+export type CommentCreateOrConnectWithoutPostInput = {
   create: CommentCreateWithoutPostInput;
   where: CommentWhereUniqueInput;
 };
@@ -204,12 +236,12 @@ export type CommentCreateOrConnectWithoutpostInput = {
 export type CommentCreateWithoutAuthorInput = {
   contain: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
-  post: PostCreateOneWithoutCommentsInput;
+  post: PostCreateNestedOneWithoutCommentsInput;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type CommentCreateWithoutPostInput = {
-  author?: Maybe<UserCreateOneWithoutCommentsInput>;
+  author?: Maybe<UserCreateNestedOneWithoutCommentsInput>;
   contain: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -232,12 +264,12 @@ export type CommentOrderByInput = {
 
 export type CommentScalarWhereInput = {
   AND?: Maybe<Array<CommentScalarWhereInput>>;
+  NOT?: Maybe<Array<CommentScalarWhereInput>>;
+  OR?: Maybe<Array<CommentScalarWhereInput>>;
   authorId?: Maybe<IntNullableFilter>;
   contain?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
-  NOT?: Maybe<Array<CommentScalarWhereInput>>;
-  OR?: Maybe<Array<CommentScalarWhereInput>>;
   postId?: Maybe<IntFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
 };
@@ -256,10 +288,21 @@ export type CommentUpdateManyMutationInput = {
   updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
+export type CommentUpdateManyWithWhereWithoutAuthorInput = {
+  data: CommentUpdateManyMutationInput;
+  where: CommentScalarWhereInput;
+};
+
+export type CommentUpdateManyWithWhereWithoutPostInput = {
+  data: CommentUpdateManyMutationInput;
+  where: CommentScalarWhereInput;
+};
+
 export type CommentUpdateManyWithoutAuthorInput = {
   connect?: Maybe<Array<CommentWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutauthorInput>>;
+  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutAuthorInput>>;
   create?: Maybe<Array<CommentCreateWithoutAuthorInput>>;
+  createMany?: Maybe<CommentCreateManyAuthorInputEnvelope>;
   delete?: Maybe<Array<CommentWhereUniqueInput>>;
   deleteMany?: Maybe<Array<CommentScalarWhereInput>>;
   disconnect?: Maybe<Array<CommentWhereUniqueInput>>;
@@ -271,8 +314,9 @@ export type CommentUpdateManyWithoutAuthorInput = {
 
 export type CommentUpdateManyWithoutPostInput = {
   connect?: Maybe<Array<CommentWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutpostInput>>;
+  connectOrCreate?: Maybe<Array<CommentCreateOrConnectWithoutPostInput>>;
   create?: Maybe<Array<CommentCreateWithoutPostInput>>;
+  createMany?: Maybe<CommentCreateManyPostInputEnvelope>;
   delete?: Maybe<Array<CommentWhereUniqueInput>>;
   deleteMany?: Maybe<Array<CommentScalarWhereInput>>;
   disconnect?: Maybe<Array<CommentWhereUniqueInput>>;
@@ -282,14 +326,14 @@ export type CommentUpdateManyWithoutPostInput = {
   upsert?: Maybe<Array<CommentUpsertWithWhereUniqueWithoutPostInput>>;
 };
 
-export type CommentUpdateManyWithWhereWithoutAuthorInput = {
-  data: CommentUpdateManyMutationInput;
-  where: CommentScalarWhereInput;
+export type CommentUpdateWithWhereUniqueWithoutAuthorInput = {
+  data: CommentUpdateWithoutAuthorInput;
+  where: CommentWhereUniqueInput;
 };
 
-export type CommentUpdateManyWithWhereWithoutPostInput = {
-  data: CommentUpdateManyMutationInput;
-  where: CommentScalarWhereInput;
+export type CommentUpdateWithWhereUniqueWithoutPostInput = {
+  data: CommentUpdateWithoutPostInput;
+  where: CommentWhereUniqueInput;
 };
 
 export type CommentUpdateWithoutAuthorInput = {
@@ -306,16 +350,6 @@ export type CommentUpdateWithoutPostInput = {
   updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
-export type CommentUpdateWithWhereUniqueWithoutAuthorInput = {
-  data: CommentUpdateWithoutAuthorInput;
-  where: CommentWhereUniqueInput;
-};
-
-export type CommentUpdateWithWhereUniqueWithoutPostInput = {
-  data: CommentUpdateWithoutPostInput;
-  where: CommentWhereUniqueInput;
-};
-
 export type CommentUpsertWithWhereUniqueWithoutAuthorInput = {
   create: CommentCreateWithoutAuthorInput;
   update: CommentUpdateWithoutAuthorInput;
@@ -330,13 +364,13 @@ export type CommentUpsertWithWhereUniqueWithoutPostInput = {
 
 export type CommentWhereInput = {
   AND?: Maybe<Array<CommentWhereInput>>;
+  NOT?: Maybe<Array<CommentWhereInput>>;
+  OR?: Maybe<Array<CommentWhereInput>>;
   author?: Maybe<UserWhereInput>;
   authorId?: Maybe<IntNullableFilter>;
   contain?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
-  NOT?: Maybe<Array<CommentWhereInput>>;
-  OR?: Maybe<Array<CommentWhereInput>>;
   post?: Maybe<PostWhereInput>;
   postId?: Maybe<IntFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
@@ -345,7 +379,6 @@ export type CommentWhereInput = {
 export type CommentWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
 };
-
 
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -407,11 +440,11 @@ export type IntNullableFilter = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword?: Maybe<User>;
-  createOneCategory: Category;
-  createOneComment: Comment;
-  createOnePost: Post;
-  createOneTag: Tag;
-  createOneUser: User;
+  createOneCategory?: Maybe<Category>;
+  createOneComment?: Maybe<Comment>;
+  createOnePost?: Maybe<Post>;
+  createOneTag?: Maybe<Tag>;
+  createOneUser?: Maybe<User>;
   deleteManyCategory?: Maybe<BatchPayload>;
   deleteManyComment?: Maybe<BatchPayload>;
   deleteManyPost?: Maybe<BatchPayload>;
@@ -427,16 +460,16 @@ export type Mutation = {
   updateManyPost?: Maybe<BatchPayload>;
   updateManyTag?: Maybe<BatchPayload>;
   updateManyUser?: Maybe<BatchPayload>;
-  updateOneCategory: Category;
-  updateOneComment: Comment;
-  updateOnePost: Post;
-  updateOneTag: Tag;
-  updateOneUser: User;
-  upsertOneCategory: Category;
-  upsertOneComment: Comment;
-  upsertOnePost: Post;
-  upsertOneTag: Tag;
-  upsertOneUser: User;
+  updateOneCategory?: Maybe<Category>;
+  updateOneComment?: Maybe<Comment>;
+  updateOnePost?: Maybe<Post>;
+  updateOneTag?: Maybe<Tag>;
+  updateOneUser?: Maybe<User>;
+  upsertOneCategory?: Maybe<Category>;
+  upsertOneComment?: Maybe<Comment>;
+  upsertOnePost?: Maybe<Post>;
+  upsertOneTag?: Maybe<Tag>;
+  upsertOneUser?: Maybe<User>;
   /** Login mutation: Send your email and password then get back a token */
   userLogin?: Maybe<AuthPayload>;
   /** Call this mutation to sign a new user up. It will return a auth payload */
@@ -481,7 +514,7 @@ export type MutationDeleteManyCategoryArgs = {
 
 
 export type MutationDeleteManyCommentArgs = {
-  where?: Maybe<CommentWhereInput>;
+  where: CommentWhereInput;
 };
 
 
@@ -491,7 +524,7 @@ export type MutationDeleteManyPostArgs = {
 
 
 export type MutationDeleteManyTagArgs = {
-  where?: Maybe<TagWhereInput>;
+  where: TagWhereInput;
 };
 
 
@@ -712,19 +745,19 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type Post = {
   __typename?: 'Post';
-  author: User;
-  authorId: Scalars['Int'];
+  author?: Maybe<User>;
+  authorId?: Maybe<Scalars['Int']>;
   categories?: Maybe<Array<Maybe<Category>>>;
-  commentCount: Scalars['Int'];
+  commentCount?: Maybe<Scalars['Int']>;
   comments?: Maybe<Array<Maybe<Comment>>>;
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  id: Scalars['Int'];
+  id?: Maybe<Scalars['Int']>;
   likeCount?: Maybe<Scalars['Int']>;
-  published: Scalars['Boolean'];
+  published?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   title?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
   viewCount?: Maybe<Scalars['Int']>;
 };
 
@@ -748,106 +781,123 @@ export type PostTagsArgs = {
 };
 
 export type PostCreateInput = {
-  author?: Maybe<UserCreateOneWithoutPostsInput>;
-  categories?: Maybe<CategoryCreateManyWithoutPostsInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostInput>;
+  author?: Maybe<UserCreateNestedOneWithoutPostsInput>;
+  categories?: Maybe<CategoryCreateNestedManyWithoutPostsInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutPostInput>;
   content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   likeCount?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<TagCreateManyWithoutPostsInput>;
+  tags?: Maybe<TagCreateNestedManyWithoutPostsInput>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   viewCount?: Maybe<Scalars['Int']>;
 };
 
-export type PostCreateManyWithoutAuthorInput = {
-  connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutauthorInput>>;
-  create?: Maybe<Array<PostCreateWithoutAuthorInput>>;
+export type PostCreateManyAuthorInput = {
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['Int']>;
+  likeCount?: Maybe<Scalars['Int']>;
+  published?: Maybe<Scalars['Boolean']>;
+  title: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  viewCount?: Maybe<Scalars['Int']>;
 };
 
-export type PostCreateManyWithoutCategoriesInput = {
+export type PostCreateManyAuthorInputEnvelope = {
+  data?: Maybe<Array<PostCreateManyAuthorInput>>;
+  skipDuplicates?: Maybe<Scalars['Boolean']>;
+};
+
+export type PostCreateNestedManyWithoutAuthorInput = {
   connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutcategoriesInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutAuthorInput>>;
+  create?: Maybe<Array<PostCreateWithoutAuthorInput>>;
+  createMany?: Maybe<PostCreateManyAuthorInputEnvelope>;
+};
+
+export type PostCreateNestedManyWithoutCategoriesInput = {
+  connect?: Maybe<Array<PostWhereUniqueInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutCategoriesInput>>;
   create?: Maybe<Array<PostCreateWithoutCategoriesInput>>;
 };
 
-export type PostCreateManyWithoutTagsInput = {
+export type PostCreateNestedManyWithoutTagsInput = {
   connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithouttagsInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutTagsInput>>;
   create?: Maybe<Array<PostCreateWithoutTagsInput>>;
 };
 
-export type PostCreateOneWithoutCommentsInput = {
+export type PostCreateNestedOneWithoutCommentsInput = {
   connect?: Maybe<PostWhereUniqueInput>;
-  connectOrCreate?: Maybe<PostCreateOrConnectWithoutcommentsInput>;
+  connectOrCreate?: Maybe<PostCreateOrConnectWithoutCommentsInput>;
   create?: Maybe<PostCreateWithoutCommentsInput>;
 };
 
-export type PostCreateOrConnectWithoutauthorInput = {
+export type PostCreateOrConnectWithoutAuthorInput = {
   create: PostCreateWithoutAuthorInput;
   where: PostWhereUniqueInput;
 };
 
-export type PostCreateOrConnectWithoutcategoriesInput = {
+export type PostCreateOrConnectWithoutCategoriesInput = {
   create: PostCreateWithoutCategoriesInput;
   where: PostWhereUniqueInput;
 };
 
-export type PostCreateOrConnectWithoutcommentsInput = {
+export type PostCreateOrConnectWithoutCommentsInput = {
   create: PostCreateWithoutCommentsInput;
   where: PostWhereUniqueInput;
 };
 
-export type PostCreateOrConnectWithouttagsInput = {
+export type PostCreateOrConnectWithoutTagsInput = {
   create: PostCreateWithoutTagsInput;
   where: PostWhereUniqueInput;
 };
 
 export type PostCreateWithoutAuthorInput = {
-  categories?: Maybe<CategoryCreateManyWithoutPostsInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostInput>;
+  categories?: Maybe<CategoryCreateNestedManyWithoutPostsInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutPostInput>;
   content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   likeCount?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<TagCreateManyWithoutPostsInput>;
+  tags?: Maybe<TagCreateNestedManyWithoutPostsInput>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   viewCount?: Maybe<Scalars['Int']>;
 };
 
 export type PostCreateWithoutCategoriesInput = {
-  author?: Maybe<UserCreateOneWithoutPostsInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostInput>;
+  author?: Maybe<UserCreateNestedOneWithoutPostsInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutPostInput>;
   content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   likeCount?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<TagCreateManyWithoutPostsInput>;
+  tags?: Maybe<TagCreateNestedManyWithoutPostsInput>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   viewCount?: Maybe<Scalars['Int']>;
 };
 
 export type PostCreateWithoutCommentsInput = {
-  author?: Maybe<UserCreateOneWithoutPostsInput>;
-  categories?: Maybe<CategoryCreateManyWithoutPostsInput>;
+  author?: Maybe<UserCreateNestedOneWithoutPostsInput>;
+  categories?: Maybe<CategoryCreateNestedManyWithoutPostsInput>;
   content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   likeCount?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<TagCreateManyWithoutPostsInput>;
+  tags?: Maybe<TagCreateNestedManyWithoutPostsInput>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   viewCount?: Maybe<Scalars['Int']>;
 };
 
 export type PostCreateWithoutTagsInput = {
-  author?: Maybe<UserCreateOneWithoutPostsInput>;
-  categories?: Maybe<CategoryCreateManyWithoutPostsInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostInput>;
+  author?: Maybe<UserCreateNestedOneWithoutPostsInput>;
+  categories?: Maybe<CategoryCreateNestedManyWithoutPostsInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutPostInput>;
   content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   likeCount?: Maybe<Scalars['Int']>;
@@ -877,13 +927,13 @@ export type PostOrderByInput = {
 
 export type PostScalarWhereInput = {
   AND?: Maybe<Array<PostScalarWhereInput>>;
+  NOT?: Maybe<Array<PostScalarWhereInput>>;
+  OR?: Maybe<Array<PostScalarWhereInput>>;
   authorId?: Maybe<IntNullableFilter>;
   content?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
   likeCount?: Maybe<IntFilter>;
-  NOT?: Maybe<Array<PostScalarWhereInput>>;
-  OR?: Maybe<Array<PostScalarWhereInput>>;
   published?: Maybe<BoolFilter>;
   title?: Maybe<StringFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
@@ -914,45 +964,6 @@ export type PostUpdateManyMutationInput = {
   viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
-export type PostUpdateManyWithoutAuthorInput = {
-  connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutauthorInput>>;
-  create?: Maybe<Array<PostCreateWithoutAuthorInput>>;
-  delete?: Maybe<Array<PostWhereUniqueInput>>;
-  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
-  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
-  set?: Maybe<Array<PostWhereUniqueInput>>;
-  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutAuthorInput>>;
-  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutAuthorInput>>;
-  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutAuthorInput>>;
-};
-
-export type PostUpdateManyWithoutCategoriesInput = {
-  connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutcategoriesInput>>;
-  create?: Maybe<Array<PostCreateWithoutCategoriesInput>>;
-  delete?: Maybe<Array<PostWhereUniqueInput>>;
-  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
-  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
-  set?: Maybe<Array<PostWhereUniqueInput>>;
-  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutCategoriesInput>>;
-  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutCategoriesInput>>;
-  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutCategoriesInput>>;
-};
-
-export type PostUpdateManyWithoutTagsInput = {
-  connect?: Maybe<Array<PostWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithouttagsInput>>;
-  create?: Maybe<Array<PostCreateWithoutTagsInput>>;
-  delete?: Maybe<Array<PostWhereUniqueInput>>;
-  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
-  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
-  set?: Maybe<Array<PostWhereUniqueInput>>;
-  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutTagsInput>>;
-  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutTagsInput>>;
-  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutTagsInput>>;
-};
-
 export type PostUpdateManyWithWhereWithoutAuthorInput = {
   data: PostUpdateManyMutationInput;
   where: PostScalarWhereInput;
@@ -968,12 +979,67 @@ export type PostUpdateManyWithWhereWithoutTagsInput = {
   where: PostScalarWhereInput;
 };
 
+export type PostUpdateManyWithoutAuthorInput = {
+  connect?: Maybe<Array<PostWhereUniqueInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutAuthorInput>>;
+  create?: Maybe<Array<PostCreateWithoutAuthorInput>>;
+  createMany?: Maybe<PostCreateManyAuthorInputEnvelope>;
+  delete?: Maybe<Array<PostWhereUniqueInput>>;
+  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
+  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
+  set?: Maybe<Array<PostWhereUniqueInput>>;
+  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutAuthorInput>>;
+  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutAuthorInput>>;
+  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutAuthorInput>>;
+};
+
+export type PostUpdateManyWithoutCategoriesInput = {
+  connect?: Maybe<Array<PostWhereUniqueInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutCategoriesInput>>;
+  create?: Maybe<Array<PostCreateWithoutCategoriesInput>>;
+  delete?: Maybe<Array<PostWhereUniqueInput>>;
+  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
+  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
+  set?: Maybe<Array<PostWhereUniqueInput>>;
+  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutCategoriesInput>>;
+  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutCategoriesInput>>;
+  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutCategoriesInput>>;
+};
+
+export type PostUpdateManyWithoutTagsInput = {
+  connect?: Maybe<Array<PostWhereUniqueInput>>;
+  connectOrCreate?: Maybe<Array<PostCreateOrConnectWithoutTagsInput>>;
+  create?: Maybe<Array<PostCreateWithoutTagsInput>>;
+  delete?: Maybe<Array<PostWhereUniqueInput>>;
+  deleteMany?: Maybe<Array<PostScalarWhereInput>>;
+  disconnect?: Maybe<Array<PostWhereUniqueInput>>;
+  set?: Maybe<Array<PostWhereUniqueInput>>;
+  update?: Maybe<Array<PostUpdateWithWhereUniqueWithoutTagsInput>>;
+  updateMany?: Maybe<Array<PostUpdateManyWithWhereWithoutTagsInput>>;
+  upsert?: Maybe<Array<PostUpsertWithWhereUniqueWithoutTagsInput>>;
+};
+
 export type PostUpdateOneRequiredWithoutCommentsInput = {
   connect?: Maybe<PostWhereUniqueInput>;
-  connectOrCreate?: Maybe<PostCreateOrConnectWithoutcommentsInput>;
+  connectOrCreate?: Maybe<PostCreateOrConnectWithoutCommentsInput>;
   create?: Maybe<PostCreateWithoutCommentsInput>;
   update?: Maybe<PostUpdateWithoutCommentsInput>;
   upsert?: Maybe<PostUpsertWithoutCommentsInput>;
+};
+
+export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
+  data: PostUpdateWithoutAuthorInput;
+  where: PostWhereUniqueInput;
+};
+
+export type PostUpdateWithWhereUniqueWithoutCategoriesInput = {
+  data: PostUpdateWithoutCategoriesInput;
+  where: PostWhereUniqueInput;
+};
+
+export type PostUpdateWithWhereUniqueWithoutTagsInput = {
+  data: PostUpdateWithoutTagsInput;
+  where: PostWhereUniqueInput;
 };
 
 export type PostUpdateWithoutAuthorInput = {
@@ -1028,26 +1094,6 @@ export type PostUpdateWithoutTagsInput = {
   viewCount?: Maybe<IntFieldUpdateOperationsInput>;
 };
 
-export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
-  data: PostUpdateWithoutAuthorInput;
-  where: PostWhereUniqueInput;
-};
-
-export type PostUpdateWithWhereUniqueWithoutCategoriesInput = {
-  data: PostUpdateWithoutCategoriesInput;
-  where: PostWhereUniqueInput;
-};
-
-export type PostUpdateWithWhereUniqueWithoutTagsInput = {
-  data: PostUpdateWithoutTagsInput;
-  where: PostWhereUniqueInput;
-};
-
-export type PostUpsertWithoutCommentsInput = {
-  create: PostCreateWithoutCommentsInput;
-  update: PostUpdateWithoutCommentsInput;
-};
-
 export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
   create: PostCreateWithoutAuthorInput;
   update: PostUpdateWithoutAuthorInput;
@@ -1066,8 +1112,15 @@ export type PostUpsertWithWhereUniqueWithoutTagsInput = {
   where: PostWhereUniqueInput;
 };
 
+export type PostUpsertWithoutCommentsInput = {
+  create: PostCreateWithoutCommentsInput;
+  update: PostUpdateWithoutCommentsInput;
+};
+
 export type PostWhereInput = {
   AND?: Maybe<Array<PostWhereInput>>;
+  NOT?: Maybe<Array<PostWhereInput>>;
+  OR?: Maybe<Array<PostWhereInput>>;
   author?: Maybe<UserWhereInput>;
   authorId?: Maybe<IntNullableFilter>;
   categories?: Maybe<CategoryListRelationFilter>;
@@ -1076,8 +1129,6 @@ export type PostWhereInput = {
   createdAt?: Maybe<DateTimeFilter>;
   id?: Maybe<IntFilter>;
   likeCount?: Maybe<IntFilter>;
-  NOT?: Maybe<Array<PostWhereInput>>;
-  OR?: Maybe<Array<PostWhereInput>>;
   published?: Maybe<BoolFilter>;
   tags?: Maybe<TagListRelationFilter>;
   title?: Maybe<StringFilter>;
@@ -1319,11 +1370,11 @@ export type StringNullableFilter = {
 
 export type Tag = {
   __typename?: 'Tag';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  postCount: Scalars['Int'];
-  posts: Array<Post>;
-  slug: Scalars['String'];
+  id?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  postCount?: Maybe<Scalars['Int']>;
+  posts?: Maybe<Array<Maybe<Post>>>;
+  slug?: Maybe<Scalars['String']>;
 };
 
 
@@ -1337,17 +1388,17 @@ export type TagPostsArgs = {
 
 export type TagCreateInput = {
   name: Scalars['String'];
-  posts?: Maybe<PostCreateManyWithoutTagsInput>;
+  posts?: Maybe<PostCreateNestedManyWithoutTagsInput>;
   slug: Scalars['String'];
 };
 
-export type TagCreateManyWithoutPostsInput = {
+export type TagCreateNestedManyWithoutPostsInput = {
   connect?: Maybe<Array<TagWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<TagCreateOrConnectWithoutpostsInput>>;
+  connectOrCreate?: Maybe<Array<TagCreateOrConnectWithoutPostsInput>>;
   create?: Maybe<Array<TagCreateWithoutPostsInput>>;
 };
 
-export type TagCreateOrConnectWithoutpostsInput = {
+export type TagCreateOrConnectWithoutPostsInput = {
   create: TagCreateWithoutPostsInput;
   where: TagWhereUniqueInput;
 };
@@ -1371,10 +1422,10 @@ export type TagOrderByInput = {
 
 export type TagScalarWhereInput = {
   AND?: Maybe<Array<TagScalarWhereInput>>;
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
   NOT?: Maybe<Array<TagScalarWhereInput>>;
   OR?: Maybe<Array<TagScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  name?: Maybe<StringFilter>;
   slug?: Maybe<StringFilter>;
 };
 
@@ -1389,9 +1440,14 @@ export type TagUpdateManyMutationInput = {
   slug?: Maybe<StringFieldUpdateOperationsInput>;
 };
 
+export type TagUpdateManyWithWhereWithoutPostsInput = {
+  data: TagUpdateManyMutationInput;
+  where: TagScalarWhereInput;
+};
+
 export type TagUpdateManyWithoutPostsInput = {
   connect?: Maybe<Array<TagWhereUniqueInput>>;
-  connectOrCreate?: Maybe<Array<TagCreateOrConnectWithoutpostsInput>>;
+  connectOrCreate?: Maybe<Array<TagCreateOrConnectWithoutPostsInput>>;
   create?: Maybe<Array<TagCreateWithoutPostsInput>>;
   delete?: Maybe<Array<TagWhereUniqueInput>>;
   deleteMany?: Maybe<Array<TagScalarWhereInput>>;
@@ -1402,19 +1458,14 @@ export type TagUpdateManyWithoutPostsInput = {
   upsert?: Maybe<Array<TagUpsertWithWhereUniqueWithoutPostsInput>>;
 };
 
-export type TagUpdateManyWithWhereWithoutPostsInput = {
-  data: TagUpdateManyMutationInput;
-  where: TagScalarWhereInput;
+export type TagUpdateWithWhereUniqueWithoutPostsInput = {
+  data: TagUpdateWithoutPostsInput;
+  where: TagWhereUniqueInput;
 };
 
 export type TagUpdateWithoutPostsInput = {
   name?: Maybe<StringFieldUpdateOperationsInput>;
   slug?: Maybe<StringFieldUpdateOperationsInput>;
-};
-
-export type TagUpdateWithWhereUniqueWithoutPostsInput = {
-  data: TagUpdateWithoutPostsInput;
-  where: TagWhereUniqueInput;
 };
 
 export type TagUpsertWithWhereUniqueWithoutPostsInput = {
@@ -1425,10 +1476,10 @@ export type TagUpsertWithWhereUniqueWithoutPostsInput = {
 
 export type TagWhereInput = {
   AND?: Maybe<Array<TagWhereInput>>;
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
   NOT?: Maybe<Array<TagWhereInput>>;
   OR?: Maybe<Array<TagWhereInput>>;
+  id?: Maybe<IntFilter>;
+  name?: Maybe<StringFilter>;
   posts?: Maybe<PostListRelationFilter>;
   slug?: Maybe<StringFilter>;
 };
@@ -1443,17 +1494,17 @@ export type TagWhereUniqueInput = {
 /** A user registered with the application */
 export type User = {
   __typename?: 'User';
-  comments: Array<Comment>;
+  comments?: Maybe<Array<Maybe<Comment>>>;
   createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
-  id: Scalars['Int'];
-  isDeleted: Scalars['Boolean'];
-  name: Scalars['String'];
+  id?: Maybe<Scalars['Int']>;
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
   password: Scalars['String'];
-  posts: Array<Post>;
+  posts?: Maybe<Array<Maybe<Post>>>;
   role?: Maybe<RoleEnum>;
-  surname: Scalars['String'];
+  surname?: Maybe<Scalars['String']>;
 };
 
 
@@ -1477,35 +1528,35 @@ export type UserPostsArgs = {
 };
 
 export type UserCreateInput = {
-  comments?: Maybe<CommentCreateManyWithoutAuthorInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutAuthorInput>;
   createdAt?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
   isDeleted?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   password: Scalars['String'];
-  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  posts?: Maybe<PostCreateNestedManyWithoutAuthorInput>;
   role?: Maybe<Role>;
   surname: Scalars['String'];
 };
 
-export type UserCreateOneWithoutCommentsInput = {
+export type UserCreateNestedOneWithoutCommentsInput = {
   connect?: Maybe<UserWhereUniqueInput>;
-  connectOrCreate?: Maybe<UserCreateOrConnectWithoutcommentsInput>;
+  connectOrCreate?: Maybe<UserCreateOrConnectWithoutCommentsInput>;
   create?: Maybe<UserCreateWithoutCommentsInput>;
 };
 
-export type UserCreateOneWithoutPostsInput = {
+export type UserCreateNestedOneWithoutPostsInput = {
   connect?: Maybe<UserWhereUniqueInput>;
-  connectOrCreate?: Maybe<UserCreateOrConnectWithoutpostsInput>;
+  connectOrCreate?: Maybe<UserCreateOrConnectWithoutPostsInput>;
   create?: Maybe<UserCreateWithoutPostsInput>;
 };
 
-export type UserCreateOrConnectWithoutcommentsInput = {
+export type UserCreateOrConnectWithoutCommentsInput = {
   create: UserCreateWithoutCommentsInput;
   where: UserWhereUniqueInput;
 };
 
-export type UserCreateOrConnectWithoutpostsInput = {
+export type UserCreateOrConnectWithoutPostsInput = {
   create: UserCreateWithoutPostsInput;
   where: UserWhereUniqueInput;
 };
@@ -1516,13 +1567,13 @@ export type UserCreateWithoutCommentsInput = {
   isDeleted?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   password: Scalars['String'];
-  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  posts?: Maybe<PostCreateNestedManyWithoutAuthorInput>;
   role?: Maybe<Role>;
   surname: Scalars['String'];
 };
 
 export type UserCreateWithoutPostsInput = {
-  comments?: Maybe<CommentCreateManyWithoutAuthorInput>;
+  comments?: Maybe<CommentCreateNestedManyWithoutAuthorInput>;
   createdAt?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -1567,7 +1618,7 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUpdateOneWithoutCommentsInput = {
   connect?: Maybe<UserWhereUniqueInput>;
-  connectOrCreate?: Maybe<UserCreateOrConnectWithoutcommentsInput>;
+  connectOrCreate?: Maybe<UserCreateOrConnectWithoutCommentsInput>;
   create?: Maybe<UserCreateWithoutCommentsInput>;
   delete?: Maybe<Scalars['Boolean']>;
   disconnect?: Maybe<Scalars['Boolean']>;
@@ -1577,7 +1628,7 @@ export type UserUpdateOneWithoutCommentsInput = {
 
 export type UserUpdateOneWithoutPostsInput = {
   connect?: Maybe<UserWhereUniqueInput>;
-  connectOrCreate?: Maybe<UserCreateOrConnectWithoutpostsInput>;
+  connectOrCreate?: Maybe<UserCreateOrConnectWithoutPostsInput>;
   create?: Maybe<UserCreateWithoutPostsInput>;
   delete?: Maybe<Scalars['Boolean']>;
   disconnect?: Maybe<Scalars['Boolean']>;
@@ -1619,14 +1670,14 @@ export type UserUpsertWithoutPostsInput = {
 
 export type UserWhereInput = {
   AND?: Maybe<Array<UserWhereInput>>;
+  NOT?: Maybe<Array<UserWhereInput>>;
+  OR?: Maybe<Array<UserWhereInput>>;
   comments?: Maybe<CommentListRelationFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   email?: Maybe<StringFilter>;
   id?: Maybe<IntFilter>;
   isDeleted?: Maybe<BoolFilter>;
   name?: Maybe<StringFilter>;
-  NOT?: Maybe<Array<UserWhereInput>>;
-  OR?: Maybe<Array<UserWhereInput>>;
   password?: Maybe<StringFilter>;
   posts?: Maybe<PostListRelationFilter>;
   role?: Maybe<EnumRoleFilter>;
@@ -1697,10 +1748,10 @@ export type FindOnePostQuery = (
   & { findOnePost?: Maybe<(
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'title' | 'content' | 'published' | 'viewCount' | 'likeCount' | 'createdAt' | 'updatedAt'>
-    & { author: (
+    & { author?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullName'>
-    ), categories?: Maybe<Array<Maybe<(
+    )>, categories?: Maybe<Array<Maybe<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'slug' | 'name'>
     )>>>, tags?: Maybe<Array<Maybe<(
@@ -1725,10 +1776,10 @@ export type PostsQuery = (
   & { posts: Array<(
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'title' | 'content' | 'published' | 'viewCount' | 'likeCount' | 'createdAt'>
-    & { author: (
+    & { author?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullName'>
-    ), categories?: Maybe<Array<Maybe<(
+    )>, categories?: Maybe<Array<Maybe<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'slug' | 'name'>
     )>>>, tags?: Maybe<Array<Maybe<(

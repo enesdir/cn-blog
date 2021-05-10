@@ -1,4 +1,4 @@
-import { extendType, stringArg } from '@nexus/schema'
+import { extendType, stringArg, nonNull } from 'nexus'
 import { hashPassword, issueToken } from '../../utils/auth'
 
 import { Context } from '../../context'
@@ -12,16 +12,16 @@ export const SignUp = extendType({
       type: 'AuthPayload',
       args: {
         name: stringArg(),
-        email: stringArg({ nullable: false }),
+        email: nonNull(stringArg()),
         surname: stringArg(),
-        password: stringArg({ nullable: false }),
+        password: nonNull(stringArg()),
       },
       description: 'Call this mutation to sign a new user up. It will return a auth payload',
       resolve: async (_, { name, email, surname, password }, ctx: Context) => {
         if (!validator.isEmail(email)) {
           throw new UserInputError('Wrong email address')
         }
-        const existing = await ctx.prisma.user.findOne({ where: { email } })
+        const existing = await ctx.prisma.user.findUnique({ where: { email } })
         if (existing) {
           throw new UserInputError('There is a existing user with this Email address.')
         }

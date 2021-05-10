@@ -1,9 +1,7 @@
-import { queryField } from '@nexus/schema'
+import { queryField, list } from 'nexus'
 
 export const CommentFindManyQuery = queryField('findManyComment', {
-  type: 'Comment',
-  nullable: true,
-  list: true,
+  type: list('Comment'),
   args: {
     where: 'CommentWhereInput',
     orderBy: 'CommentOrderByInput',

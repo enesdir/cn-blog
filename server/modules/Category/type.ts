@@ -1,14 +1,12 @@
-import { objectType } from '@nexus/schema'
+import { objectType } from 'nexus'
 
 export const Category = objectType({
   name: 'Category',
   definition(t) {
-    t.int('id', { nullable: false })
-    t.string('name', { nullable: false })
-    t.string('slug', { nullable: false })
-    t.field('posts', {
-      nullable: true,
-      list: [true],
+    t.int('id')
+    t.string('name')
+    t.string('slug')
+    t.nullable.list.field('posts', {
       type: 'Post',
       args: {
         where: 'PostWhereInput',
@@ -23,7 +21,6 @@ export const Category = objectType({
     })
     t.field('postCount', {
       type: 'Int',
-      nullable: false,
       resolve(root, {}, ctx) {
         return ctx.prisma.post.count({
           where: { categories: { some: { id: root.id } } },

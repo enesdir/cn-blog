@@ -1,13 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const CategoryDeleteOneMutation = mutationField('deleteOneCategory', {
   type: 'Category',
-  nullable: true,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'CategoryWhereUniqueInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { where }, ctx) {
     return ctx.prisma.category.delete({ where })

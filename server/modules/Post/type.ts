@@ -1,55 +1,49 @@
-import { objectType } from '@nexus/schema'
+import { objectType } from 'nexus'
 
 export const Post = objectType({
   name: 'Post',
   definition(t) {
-    t.int('id', { nullable: false })
+    t.int('id')
     t.string('title')
-    t.string('content', {
-      nullable: true,
-    })
-    t.boolean('published', { nullable: false })
+    t.string('content')
+    t.boolean('published')
     t.int('viewCount')
     t.int('likeCount')
-    t.int('authorId', { nullable: false })
+    t.int('authorId', )
     t.field('author', {
       type: 'User',
-      nullable: false,
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
-          .findOne({
+          .findUnique({
             where: { id: Number(_parent.id) },
           })
           .author(),
     })
     t.list.field('tags', {
       type: 'Tag',
-      nullable: true,
       args: {
         where: 'TagWhereInput',
       },
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
-          .findOne({
+          .findUnique({
             where: { id: Number(_parent.id) },
           })
           .tags(),
     })
     t.list.field('categories', {
-      nullable: true,
       type: 'Category',
       args: {
         where: 'CategoryWhereInput',
       },
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
-          .findOne({
+          .findUnique({
             where: { id: Number(_parent.id) },
           })
           .categories(),
     })
     t.list.field('comments', {
-      nullable: true,
       type: 'Comment',
       args: {
         where: 'CommentWhereInput',
@@ -60,21 +54,20 @@ export const Post = objectType({
       },
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
-          .findOne({
+          .findUnique({
             where: { id: Number(_parent.id) },
           })
           .comments(),
     })
     t.field('commentCount', {
       type: 'Int',
-      nullable: false,
       resolve(root, {}, { prisma }) {
         return prisma.post.count({
           where: { comments: { some: { id: root.id } } },
         })
       },
     })
-    t.field('createdAt', { nullable: false, type: 'DateTime' })
-    t.field('updatedAt', { nullable: false, type: 'DateTime' })
+    t.nonNull.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
   },
 })

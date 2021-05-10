@@ -1,13 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const PostCreateOneMutation = mutationField('createOnePost', {
   type: 'Post',
-  nullable: false,
   args: {
-    data: arg({
+    data: nonNull(arg({
       type: 'PostCreateInput',
-      nullable: false,
-    }),
+    })),
   },
   async resolve(_parent, { data }, { prisma, user }) {
     /* userContext is not necessary cuz we are already check in authentication with graphql-shield rules */

@@ -1,18 +1,18 @@
 import { ApolloError, AuthenticationError } from 'apollo-server-micro'
 import { isPasswordValid, issueToken } from '../../utils/auth'
-import { mutationField, stringArg } from '@nexus/schema'
+import { mutationField, stringArg, nonNull } from 'nexus'
 
 import { Context } from '../../context'
 
 export const Login = mutationField('userLogin', {
   type: 'AuthPayload',
   args: {
-    email: stringArg({ nullable: false, description: 'email of the user' }),
-    password: stringArg({ nullable: false, description: 'password of the user' }),
+    email: nonNull(stringArg({ description: 'email of the user' })),
+    password: nonNull(stringArg({ description: 'password of the user' })),
   },
   description: 'Login mutation: Send your email and password then get back a token',
   resolve: async (_, { email, password }, ctx: Context) => {
-    const user = await ctx.prisma.user.findOne({ where: { email } })
+    const user = await ctx.prisma.user.findUnique({ where: { email } })
     // Check to see if user exists
     if (!user) {
       throw new ApolloError(`No user found for email: ${email}`, 'USER_NOT_FOUND')

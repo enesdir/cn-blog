@@ -1,21 +1,17 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const PostUpsertOneMutation = mutationField('upsertOnePost', {
   type: 'Post',
-  nullable: false,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'PostWhereUniqueInput',
-      nullable: false,
-    }),
-    create: arg({
+    })),
+    create: nonNull(arg({
       type: 'PostCreateInput',
-      nullable: false,
-    }),
-    update: arg({
+    })),
+    update: nonNull(arg({
       type: 'PostUpdateInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, args, ctx) {
     return ctx.prisma.post.upsert({

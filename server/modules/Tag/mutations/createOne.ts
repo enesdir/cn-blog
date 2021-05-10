@@ -1,13 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const TagCreateOneMutation = mutationField('createOneTag', {
   type: 'Tag',
-  nullable: false,
   args: {
-    data: arg({
+    data: nonNull(arg({
       type: 'TagCreateInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { data }, ctx) {
     return ctx.prisma.tag.create({

@@ -2,7 +2,7 @@ import * as AllTypes from './modules'
 
 import { IS_DEV } from '../src/utils/constants'
 import { applyMiddleware } from 'graphql-middleware'
-import { makeSchema } from '@nexus/schema'
+import { makeSchema } from 'nexus'
 import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
 import { permissions } from './permissions'
@@ -21,22 +21,12 @@ export const nexusSchema = makeSchema({
     typegen: getPath('generated/nexus-typegen.ts'),
     schema: getPath('generated/schema.graphql'),
   },
-  typegenAutoConfig: {
-    contextType: 'Context.Context',
-    sources: [
-      {
-        source: '@prisma/client',
-        alias: 'prisma',
-      },
-      {
-        source: getPath('context.ts'),
-        alias: 'Context',
-      },
-    ],
-    backingTypeMap: {
-      Date: 'Date',
-      URL: 'URL',
-    },
+  contextType: {
+    module: getPath('context.ts'),
+    export: 'Context',
+  },
+  sourceTypes: {
+    modules: [{ module: '.prisma/client', alias: 'prisma' }],
   },
 })
 

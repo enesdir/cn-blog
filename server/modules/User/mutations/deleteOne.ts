@@ -1,13 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const UserDeleteOneMutation = mutationField('deleteOneUser', {
   type: 'User',
-  nullable: true,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'UserWhereUniqueInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { where }, ctx) {
     return ctx.prisma.user.delete({ where })

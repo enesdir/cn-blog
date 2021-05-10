@@ -1,9 +1,8 @@
 import { Context } from '../../context'
-import { queryField } from '@nexus/schema'
+import { queryField } from 'nexus'
 
 export const Me = queryField('me', {
   type: 'User',
-  nullable: true,
   description: 'The current authenticated User',
   resolve: async (_, __, ctx: Context) => {
     const userContext = await ctx.user
@@ -13,7 +12,7 @@ export const Me = queryField('me', {
       return
     }
 
-    const user = await ctx.prisma.user.findOne({
+    const user = await ctx.prisma.user.findUnique({
       where: { id: Number(userContext.id) },
     })
 

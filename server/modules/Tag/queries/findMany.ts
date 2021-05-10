@@ -1,9 +1,7 @@
-import { queryField } from '@nexus/schema'
+import { list, queryField } from 'nexus'
 
 export const TagFindManyQuery = queryField('findManyTag', {
-  type: 'Tag',
-  nullable: true,
-  list: true,
+  type: list('Tag'),
   args: {
     where: 'TagWhereInput',
     orderBy: 'TagOrderByInput',

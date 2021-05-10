@@ -1,9 +1,7 @@
-import { queryField } from '@nexus/schema'
+import { list, queryField } from 'nexus'
 
 export const CategoryFindManyQuery = queryField('findManyCategory', {
-  type: 'Category',
-  nullable: true,
-  list: true,
+  type: list('Category'),
   args: {
     where: 'CategoryWhereInput',
     orderBy: 'CategoryOrderByInput',

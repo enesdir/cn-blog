@@ -1,16 +1,14 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const TagUpdateManyMutation = mutationField('updateManyTag', {
   type: 'BatchPayload',
   args: {
     where: arg({
       type: 'TagWhereInput',
-      nullable: true,
     }),
-    data: arg({
+    data: nonNull(arg({
       type: 'TagUpdateManyMutationInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, args, ctx) {
     return ctx.prisma.tag.updateMany(args)

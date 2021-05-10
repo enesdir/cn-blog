@@ -4,23 +4,22 @@ import { PrismaClient } from '@prisma/client'
 import { getCurrentUserByToken } from './utils/auth'
 import { logger } from './utils/logger'
 
-export interface Context {
+export type Context = {
   prisma: PrismaClient
   user?: Promise<UserDetails | undefined>
 }
 
 export function createContext(ctx: contextPayload): Context {
   let prisma: PrismaClient
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'production') {
+    prisma = new PrismaClient()
+  } else {
     if (!global.prisma) {
       global.prisma = new PrismaClient({
         log: ['query', 'info', 'warn'],
-        debug: true,
       })
     }
     prisma = global.prisma
-  } else {
-    prisma = new PrismaClient()
   }
   // The request is authenticated or not
   let user: Promise<UserDetails | undefined>

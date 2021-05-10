@@ -1,21 +1,17 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const TagUpsertOneMutation = mutationField('upsertOneTag', {
   type: 'Tag',
-  nullable: false,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'TagWhereUniqueInput',
-      nullable: false,
-    }),
-    create: arg({
+    })),
+    create: nonNull(arg({
       type: 'TagCreateInput',
-      nullable: false,
-    }),
-    update: arg({
+    })),
+    update: nonNull(arg({
       type: 'TagUpdateInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, args, ctx) {
     return ctx.prisma.tag.upsert({

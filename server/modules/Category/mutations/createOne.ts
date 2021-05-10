@@ -1,13 +1,12 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const CategoryCreateOneMutation = mutationField('createOneCategory', {
   type: 'Category',
-  nullable: false,
   args: {
-    data: arg({
+    data: nonNull(arg({
       type: 'CategoryCreateInput',
-      nullable: false,
-    }),
+
+    })),
   },
   resolve(_parent, { data }, ctx) {
     return ctx.prisma.category.create({

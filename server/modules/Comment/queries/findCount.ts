@@ -1,4 +1,4 @@
-import { queryField } from '@nexus/schema'
+import { queryField } from 'nexus'
 
 export const CommentFindManyCountQuery = queryField('findManyCommentCount', {
   type: 'Int',

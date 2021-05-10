@@ -1,12 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const TagDeleteManyMutation = mutationField('deleteManyTag', {
   type: 'BatchPayload',
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'TagWhereInput',
-      nullable: true,
-    }),
+    })),
   },
   resolve(_parent, { where }, ctx) {
     return ctx.prisma.tag.deleteMany({ where })

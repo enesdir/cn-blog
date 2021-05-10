@@ -1,31 +1,29 @@
-import { objectType } from '@nexus/schema'
+import { objectType } from 'nexus'
 
 export const Comment = objectType({
   name: 'Comment',
   definition(t) {
-    t.int('id', { nullable: false })
-    t.string('contain', { nullable: false })
-    t.int('authorId', { nullable: true })
-    t.field('author', {
+    t.int('id',)
+    t.string('contain',)
+    t.int('authorId',)
+    t.nullable.field('author', {
       type: 'User',
-      nullable: true,
       resolve: (_parent, _args, ctx) =>
         ctx.prisma.post
-          .findOne({
+          .findUnique({
             where: { id: Number(_parent.id) },
           })
           .author(),
     })
-    t.int('postId', { nullable: true })
+    t.nullable.int('postId',)
     t.field('post', {
       type: 'Post',
-      nullable: false,
       resolve(parent: any) {
         return parent['post']
       },
     })
 
-    t.field('createdAt', { nullable: false, type: 'DateTime' })
-    t.field('updatedAt', { nullable: false, type: 'DateTime' })
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
   },
 })

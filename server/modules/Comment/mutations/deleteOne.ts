@@ -1,13 +1,11 @@
-import { arg, mutationField } from '@nexus/schema'
+import { arg, mutationField, nonNull } from 'nexus'
 
 export const CommentDeleteOneMutation = mutationField('deleteOneComment', {
   type: 'Comment',
-  nullable: true,
   args: {
-    where: arg({
+    where: nonNull(arg({
       type: 'CommentWhereUniqueInput',
-      nullable: false,
-    }),
+    })),
   },
   resolve(_parent, { where }, ctx) {
     return ctx.prisma.comment.delete({ where })
