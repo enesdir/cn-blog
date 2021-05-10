@@ -8,13 +8,6 @@ export const Tag = objectType({
     t.string('slug')
     t.list.field('posts', {
       type: 'Post',
-      args: {
-        where: 'PostWhereInput',
-        orderBy: 'PostOrderByInput',
-        cursor: 'PostWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-      },
       resolve: (parent, _, ctx) =>
         ctx.prisma.tag
           .findUnique({

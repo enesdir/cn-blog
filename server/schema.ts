@@ -3,7 +3,6 @@ import * as AllTypes from './modules'
 import { IS_DEV } from '../src/utils/constants'
 import { applyMiddleware } from 'graphql-middleware'
 import { makeSchema } from 'nexus'
-import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
 import { permissions } from './permissions'
 
@@ -11,11 +10,6 @@ const getPath = (fileName: string) => path.join(process.cwd(), 'server', fileNam
 
 export const nexusSchema = makeSchema({
   types: AllTypes,
-  plugins: [
-    nexusPrisma({
-      experimentalCRUD: true,
-    }),
-  ],
   shouldGenerateArtifacts: IS_DEV,
   outputs: {
     typegen: getPath('generated/nexus-typegen.ts'),

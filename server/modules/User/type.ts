@@ -13,13 +13,6 @@ export const User = objectType({
     t.boolean('isDeleted')
     t.list.field('posts', {
       type: 'Post',
-      args: {
-        where: 'PostWhereInput',
-        orderBy: 'PostOrderByInput',
-        cursor: 'PostWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-      },
       resolve: (parent, _, ctx) =>
         ctx.prisma.user
           .findUnique({
@@ -29,13 +22,6 @@ export const User = objectType({
     })
     t.list.field('comments', {
       type: 'Comment',
-      args: {
-        where: 'CommentWhereInput',
-        orderBy: 'CommentOrderByInput',
-        cursor: 'CommentWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-      },
       resolve: (parent, _, ctx) =>
         ctx.prisma.user
           .findUnique({

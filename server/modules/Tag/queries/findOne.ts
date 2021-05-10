@@ -1,15 +1,13 @@
-import { arg, queryField, nonNull } from 'nexus'
+import { arg, queryField, nonNull, intArg } from 'nexus'
 
 export const TagFindOneQuery = queryField('findOneTag', {
   type: 'Tag',
   args: {
-    where: nonNull(arg({
-      type: 'TagWhereUniqueInput',
-    })),
+    tagId: nonNull(intArg()),
   },
-  resolve(_parent, { where }, ctx) {
-    return ctx.prisma.tag.findUnique({
-      where,
+  resolve(_parent, args, { prisma }) {
+    return prisma.tag.findUnique({
+      where: { id: Number(args.tagId) },
     })
   },
 })

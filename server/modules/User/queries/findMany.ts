@@ -1,11 +1,8 @@
 import { list, queryField } from 'nexus'
 
-export const UserFindManyQuery = queryField('findManyUser', {
+export const UserFindManyQuery = queryField('users', {
   type: list('User'),
   args: {
-    where: 'UserWhereInput',
-    orderBy: 'UserOrderByInput',
-    cursor: 'UserWhereUniqueInput',
     skip: 'Int',
     take: 'Int',
   },

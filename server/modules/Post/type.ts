@@ -21,9 +21,6 @@ export const Post = objectType({
     })
     t.list.field('tags', {
       type: 'Tag',
-      args: {
-        where: 'TagWhereInput',
-      },
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
           .findUnique({
@@ -33,10 +30,7 @@ export const Post = objectType({
     })
     t.list.field('categories', {
       type: 'Category',
-      args: {
-        where: 'CategoryWhereInput',
-      },
-      resolve: (_parent, _args, { prisma }) =>
+        resolve: (_parent, _args, { prisma }) =>
         prisma.post
           .findUnique({
             where: { id: Number(_parent.id) },
@@ -45,13 +39,6 @@ export const Post = objectType({
     })
     t.list.field('comments', {
       type: 'Comment',
-      args: {
-        where: 'CommentWhereInput',
-        orderBy: 'CommentOrderByInput',
-        cursor: 'CommentWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-      },
       resolve: (_parent, _args, { prisma }) =>
         prisma.post
           .findUnique({

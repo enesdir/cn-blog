@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const getPostsQuery = gql`
   query posts {
-    posts(where: { published: { equals: true } }, orderBy: { createdAt: desc }) {
+    posts {
       id
       title
       author {

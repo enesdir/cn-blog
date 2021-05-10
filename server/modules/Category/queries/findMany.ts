@@ -1,11 +1,8 @@
 import { list, queryField } from 'nexus'
 
-export const CategoryFindManyQuery = queryField('findManyCategory', {
+export const CategoryFindManyQuery = queryField('categories', {
   type: list('Category'),
   args: {
-    where: 'CategoryWhereInput',
-    orderBy: 'CategoryOrderByInput',
-    cursor: 'CategoryWhereUniqueInput',
     skip: 'Int',
     take: 'Int',
   },

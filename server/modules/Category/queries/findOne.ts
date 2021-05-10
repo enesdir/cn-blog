@@ -1,15 +1,13 @@
-import { arg, queryField, nonNull } from 'nexus'
+import { queryField, nonNull, intArg } from 'nexus'
 
 export const CategoryFindOneQuery = queryField('findOneCategory', {
   type: 'Category',
   args: {
-    where: nonNull(arg({
-      type: 'CategoryWhereUniqueInput',
-    })),
+    categoryId: nonNull(intArg()),
   },
-  resolve(_parent, { where }, ctx) {
-    return ctx.prisma.category.findUnique({
-      where,
+  resolve(_parent, args, { prisma }) {
+    return prisma.category.findUnique({
+      where: { id: Number(args.categoryId) },
     })
   },
 })

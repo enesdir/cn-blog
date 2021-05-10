@@ -1,17 +1,14 @@
 import { list, queryField } from 'nexus'
 
-export const PostFindManyQuery = queryField('findManyPost', {
+export const PostFindManyQuery = queryField('posts', {
   type: list('Post'),
   args: {
-    where: 'PostWhereInput',
-    orderBy: 'PostOrderByInput',
-    cursor: 'PostWhereUniqueInput',
     skip: 'Int',
     take: 'Int',
   },
-  resolve(_parent, args, { prisma }) {
+  resolve(_parent, _args, { prisma }) {
     return prisma.post.findMany({
-      ...args,
+      where: { published: { equals: true } }, orderBy: { createdAt: 'desc' }
     })
   },
 })

@@ -22,9 +22,7 @@ export const permissions = shield(
   {
     Query: { '*': allow },
     Mutation: {
-      createOnePost: isAuthenticated,
-      // FIXME: extends rules
-      updateOnePost: or(isAuthenticated, isAdmin),
+
       // userLogin: rules.isUnauthenticated,
       // userSignup: rules.isUnauthenticated,
     },

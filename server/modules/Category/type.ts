@@ -8,13 +8,6 @@ export const Category = objectType({
     t.string('slug')
     t.nullable.list.field('posts', {
       type: 'Post',
-      args: {
-        where: 'PostWhereInput',
-        orderBy: 'PostOrderByInput',
-        cursor: 'PostWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-      },
       resolve(parent: any) {
         return parent['posts']
       },

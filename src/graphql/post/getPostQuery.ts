@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const getPostQuery = gql`
   query findOnePost($postId: Int!) {
-    findOnePost(where: { id: $postId }) {
+    findOnePost(postId: $postId) {
       id
       title
       author {

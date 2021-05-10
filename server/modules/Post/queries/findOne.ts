@@ -1,15 +1,13 @@
-import { arg, queryField, nonNull } from 'nexus'
+import { idArg, queryField, nonNull, intArg } from 'nexus'
 
 export const PostFindOneQuery = queryField('findOnePost', {
   type: 'Post',
   args: {
-    where: nonNull(arg({
-      type: 'PostWhereUniqueInput',
-    })),
+    postId: nonNull(intArg()),
   },
-  resolve(_parent, { where }, { prisma }) {
+  resolve(_parent, args, { prisma }) {
     return prisma.post.findUnique({
-      where,
+      where: { id: Number(args.postId) },
     })
   },
 })

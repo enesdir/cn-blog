@@ -1,11 +1,8 @@
 import { list, queryField } from 'nexus'
 
-export const TagFindManyQuery = queryField('findManyTag', {
+export const TagFindManyQuery = queryField('tags', {
   type: list('Tag'),
   args: {
-    where: 'TagWhereInput',
-    orderBy: 'TagOrderByInput',
-    cursor: 'TagWhereUniqueInput',
     skip: 'Int',
     take: 'Int',
   },

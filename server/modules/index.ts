@@ -1,5 +1,3 @@
-export * from './Query'
-export * from './Mutations'
 export * from './Auth'
 export * from './User'
 export * from './Post'
