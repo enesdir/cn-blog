@@ -16,10 +16,10 @@ const PostPage = () => {
     console.log('loading')
     return <div>Loading ...</div>
   }
-  if (error) {
-    console.log('error')
-    return <div>Error: {error.message}</div>
-  }
+  // if (error) {
+  //   console.log('error')
+  //   return <div>Error: {error.message}</div>
+  // }
 
   console.log(`response`, data)
 
@@ -28,7 +28,7 @@ const PostPage = () => {
     title = `${title} (Draft)`
   }
 
-  const authorName = data.findOnePost.author ? data.findOnePost.author.name : 'Unknown author'
+//  const authorName = data.findOnePost.author ? data.findOnePost.author.name : 'Unknown author'
   return (
     <MainLayout headTitle={title} title="Welcome My Blog Post App">
         <Post post={data.findOnePost} key={data.findOnePost.id} />
