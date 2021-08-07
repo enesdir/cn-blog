@@ -1,10 +1,17 @@
-import Cors from 'micro-cors'
-import { PageConfig } from 'next'
-import { createServer } from '../../../server/createServer'
+import { NextApiRequest, NextApiResponse, PageConfig } from 'next'
 
-const cors = Cors({
-  allowMethods: ['POST', 'OPTIONS'],
-})
+import Cors from 'cors'
+import { createServer } from '../../../server/createServer'
+import initMiddleware  from '../../../server/utils/initMiddleware'
+
+// Initialize the cors middleware
+const cors = initMiddleware(
+  // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+  Cors({
+    // Only allow requests with GET, POST and OPTIONS
+    methods: ["GET", "POST", "OPTIONS"],
+  })
+);
 
 export const config: PageConfig = {
   api: {
@@ -12,6 +19,24 @@ export const config: PageConfig = {
   },
 }
 
-const handler = createServer({ path: '/api/graphql' })
+export default async function handler(req:NextApiRequest, res:NextApiResponse):Promise<void> {
+  await cors(req, res)
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://studio.apollographql.com'
+  )
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  if (req.method === 'OPTIONS') {
+    res.end()
+    return
+  }
+  const apolloServerHandler = await createServer({
+    path: '/api/graphql',
+  })
+  return apolloServerHandler(req, res);
+}
 
-export default cors(handler)

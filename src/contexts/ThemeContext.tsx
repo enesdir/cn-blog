@@ -1,4 +1,4 @@
-import { Direction, MuiThemeProvider, createMuiTheme, darken } from '@material-ui/core/styles'
+import { Direction, MuiThemeProvider, createTheme, darken } from '@material-ui/core/styles'
 import { IS_BROWSER, IS_DEV, IS_SERVER } from '@utils/constants'
 import { blue, pink } from '@material-ui/core/colors'
 import { parseCookies, setCookie } from 'nookies'
@@ -88,7 +88,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
   }, [direction])
 
   const theme = React.useMemo(() => {
-    const nextTheme = createMuiTheme({
+    const nextTheme = createTheme({
       direction,
       palette: {
         primary: {
