@@ -80,7 +80,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
 
   // persist paletteType
   React.useEffect(() => {
-    setCookie(null, 'paletteType', paletteType, { path: '/', maxAge: 31536000 })
+    setCookie(null, 'paletteType', paletteType, { path: '/', sameSite: 'lax', maxAge: 31536000 })
   }, [paletteType])
 
   useEnhancedEffect(() => {

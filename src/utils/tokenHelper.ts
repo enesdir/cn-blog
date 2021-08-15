@@ -16,9 +16,13 @@ export function getToken(ctx?: NextPageContext) {
   const cookies = parseCookies(ctx)
   return cookies[TOKEN_KEY]
 }
+
+export const MAX_AGE = 60 * 60 * 8 // 8 hours
+
 export const setToken = (token: string) => {
   setCookie(null, TOKEN_KEY, token, {
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: MAX_AGE,
+    expires: new Date(Date.now() + MAX_AGE * 1000),
     path: '/',
     sameSite: 'lax',
     secure: IS_PROD,
@@ -27,6 +31,7 @@ export const setToken = (token: string) => {
 
 export const removeToken = () => {
   destroyCookie(null, TOKEN_KEY, {
+    maxAge: -1,
     path: '/',
   })
 }
