@@ -11,11 +11,10 @@ import { useApollo } from '@app/lib/withApollo'
 
 interface PuffyAppProps extends AppProps {
   token: string
-  err: any
 }
 
 function BlogApp(props: PuffyAppProps) {
-  const { Component, pageProps, token, err } = props
+  const { Component, pageProps, token } = props
   const apolloClient = useApollo(pageProps.initialApolloState)
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -33,7 +32,7 @@ function BlogApp(props: PuffyAppProps) {
       <GlobalHead />
       <ApolloProvider client={apolloClient}>
         <AuthProvider token={token} authed={authed}>
-          <Component {...pageProps} err={err} />
+          <Component {...pageProps} />
         </AuthProvider>
       </ApolloProvider>
     </ThemeProvider>

@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse, PageConfig } from 'next'
 import Cors from 'cors'
 import { createServer } from '../../../server/createServer'
 import initMiddleware from '../../../server/utils/initMiddleware'
-import { withSentry } from '@sentry/nextjs'
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -35,4 +34,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
   return apolloServerHandler(req, res)
 }
 
-export default withSentry(handler)
+export default handler
